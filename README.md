@@ -2,7 +2,7 @@
 ## Getting Started
 
 <a name="readme-top"></a>
-
+<img src="logo.jpg" alt="LOGO" width="200px" style="text-align: center;">
 <!--
 HOW TO USE:
 This is an example of how you may give instructions on setting up your project locally.
@@ -53,8 +53,6 @@ After you're finished please remove all the comments and instructions!
 
 
 **ISO Documentation**  is a robust web application specifically designed to streamline the storage and management of diverse document types. From manuals and procedures to guidelines, organizational standards, and criteria documents, this user-friendly platform effortlessly handles documents in various formats. With a powerful database at its core, ISO Documentation enables easy organization and retrieval of documents. Users can swiftly search through the repository using filters such as department, date, category, and more. Whether you need to access a specific manual or locate a procedure document, ISO Documentation simplifies the process, saving valuable time and increasing productivity. Say goodbye to manual document tracking and embrace the efficiency and convenience of ISO Documentation for all your document management needs.
-
-Overall, this custom enumerable program enhances the functionality of collections by providing essential methods for condition-based evaluation and filtering.
 
 ## 🛠 Built With <a name="built-with"></a>
 
@@ -125,8 +123,9 @@ The web app includes the following features:
 
 ### Prerequisites
 
-In order to run this project you need:
-- Make sure ruby is installed
+Before you run the application:
+  - Make sure MS SQL is installed
+  - The right user and database are added.
 <!--
 Example command:
 
@@ -136,7 +135,6 @@ Example command:
  -->
 
 ### Setup
-Before running the application make sure MS SQL is installed and the right user and database are added.
 Clone the repository to desired directory on local computer.
 > `git clone https://github.com/wacoo/iso-documentation-flask--react`
 
