@@ -1,0 +1,20 @@
+/index
+- list all documents
+
+/categories
+/categories/:id
+/categories/create
+/categories/update -futute fork
+/categories/delete
+
+/departments
+/departments/:id
+/departments/update -futute fork
+/departments/delete
+
+/documents
+/documents/:id
+
+/auth/users
+/auth/users/:id
+/departments/update

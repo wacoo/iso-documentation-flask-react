@@ -1,7 +1,9 @@
-from sqlalchemy import create_engine, ForeignKey, String, Integer, Column, Boolean
+from sqlalchemy import create_engine, ForeignKey, String, Integer, Column, Boolean, TIMESTAMP
 from sqlalchemy.orm import relationship
 from  models.base import Base
 from uuid import uuid4
+from datetime import datetime
+
 class User(Base):
     __tablename__ = 'users'
     id = Column(String(36), primary_key=True)
@@ -10,7 +12,8 @@ class User(Base):
     last_name = Column(String(45))
     access_level = Column(Integer)
     active = Column(Boolean)
-    timestamps = relationship('Timestamp', back_populates='user')
+    created_at = Column(TIMESTAMP, default=datetime.utcnow)
+    updated_at = Column(TIMESTAMP, default=datetime.utcnow, onupdate=datetime.utcnow)
     def __init__(self, first_name, middle_name, last_name, access_level, active):
         self.id = str(uuid4())
         self.first_name = first_name
