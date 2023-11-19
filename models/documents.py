@@ -16,7 +16,7 @@ class Document(Base):
     document = Column(BLOB)
     created_at = Column(TIMESTAMP, default=datetime.utcnow)
     updated_at = Column(TIMESTAMP, default=datetime.utcnow, onupdate=datetime.utcnow)
-    categories = relationship('Category', back_populates='documents')
+    category = relationship('Category', back_populates='documents')
     department = relationship('Department', back_populates='documents')
     def __init__(self, doc_title, doc_description, revision_no, category_id, department_id, doc_type, document):
         self.id = str(uuid4())

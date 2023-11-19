@@ -12,7 +12,7 @@ project_path = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(project_path)
 
 
-#Base.metadata.drop_all(engine)
+# Base.metadata.drop_all(engine)
 Base.metadata.create_all(engine)
 
 Session = sessionmaker(bind=engine)
@@ -21,11 +21,12 @@ session = Session()
 
 user1 = User(first_name='John', middle_name='Doe', last_name='Smith', access_level=1, active=True)
 session.add(user1)
+session.commit()
 
-cat = Category(name='Criteria')
+cat = Category(name='Stretegy')
 session.add(cat)
 
-department = Department(name='Engineering')
+department = Department(name='Quality')
 session.add(department)
 
 file_path = os.path.join('models', 'app.txt')
@@ -35,7 +36,7 @@ with open(file_path, 'rb') as file:
     binary_data = file.read()
 # Create a new document
 document = Document(
-    doc_title='Example Document',
+    doc_title='Digital transformation',
     doc_description='This is an example document',
     revision_no=1,
     category_id=cat.id,
@@ -55,4 +56,4 @@ session.close()
 all = session.query(Document).all()
 
 for document in all:
-    print(document.id, document.doc_title, document.doc_description, document.categories.name)
+    print(document.id, document.doc_title, document.doc_description, document.category.name)
