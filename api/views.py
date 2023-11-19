@@ -211,7 +211,7 @@ def create_document():
                                                                                'updated_at': doc.updated_at}}), 201
     except Exception as e:
         session.rollback()
-        return jsonify({'error': 'Department not created! ' + str(e)}), 500
+        return jsonify({'error': 'Document not created! ' + str(e)}), 500
 
 
 if __name__ == '__main__':
