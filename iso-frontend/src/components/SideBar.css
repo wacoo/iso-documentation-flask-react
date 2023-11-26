@@ -1,0 +1,33 @@
+.side-bar-wrapper {
+    width: 15%;
+    max-height: 100vh;
+    padding-top: 5%;
+    padding-bottom: 5%;
+    display: flex;
+    flex-direction: column;
+    background-color: #1e90ff;
+    color: #fff;
+    border: #fff solid 2px;
+    margin: 10px 0;
+}
+
+.side-button-wrapper {
+    background: linear-gradient(to bottom, rgb(57, 206, 214) 0%, #123eb7 15%, rgb(57, 206, 214) 100%);
+    border: #000 solid 2px;
+}
+
+.side-button-wrapper button {
+    width: 100%;
+    min-height: 100%;
+    padding: 12px;
+    font-size: 1.5vw;
+    font-weight: 600;
+    color: #fff;
+    background-color: transparent;
+    border: none;
+    border: #fff solid 2px;
+}
+
+.side-button-wrapper button:hover {
+    color: orange;
+}

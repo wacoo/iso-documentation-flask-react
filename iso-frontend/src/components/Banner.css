@@ -1,0 +1,19 @@
+.banner-wrapper {
+    background-color:#0d3076;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 30px;
+    height: 60px;
+}
+
+.banner-wrapper h1 {
+    width: 60%;
+    font-size: 2.5vw;
+}
+
+.banner-wrapper img {
+    width: 60px;
+    border-radius: 50%;
+}
