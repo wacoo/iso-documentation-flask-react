@@ -8,3 +8,5 @@ PyMySQL==1.1.0
 PyMySQL==1.1.0
 requests==2.31.0
 Flask-JWT-Extended==4.5.3
+Flask-Bcrypt==1.0.1
+Flask-Bcrypt==1.0.1
