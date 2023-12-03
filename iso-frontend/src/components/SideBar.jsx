@@ -5,9 +5,10 @@ const SideBar = () => {
     return (
         <div className="side-bar-wrapper">
             <SideButton text = "Home" />
-            <SideButton text = "Documents" />
+            <SideButton text = "Document" />
             <SideButton text = "Category" />
-            <SideButton text = "Users" />
+            <SideButton text = "Department" />
+            <SideButton text = "User" />
         </div>
     );
 }

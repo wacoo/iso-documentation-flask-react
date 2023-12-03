@@ -1,5 +1,30 @@
+import { useDispatch, useSelector } from "react-redux";
+import { fetchDocuments } from "../feature/document/documentSlice";
+import { useEffect } from "react";
+import Table from "./Table";
 
 const HomeContent = () => {
+
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(fetchDocuments());
+    }, [dispatch]);
+
+    const documents = useSelector((state) => state.documents.documents) ?? [];
+    console.log("Documents have changed:", documents);
+    const columns = ['Title', 'Category', 'Revision no.', 'Department', 'Document'];
+    let data = [];
+    if (Array.isArray(documents) && documents.length > 0) {
+        data = documents.map((doc) => ({
+            Title: doc.title,
+            Category: doc.category,
+            'Revision no.': doc.revision,
+            Department: doc.department,
+            Document: <button type="button">Download</button>,
+        }));
+    }
+    
     return (
         <div className="home-content-wrapper">
             <div className="input">
@@ -16,7 +41,8 @@ const HomeContent = () => {
                     </div>
                 </form>
             </div>
-            <table className="table-content">
+            {data.length > 0 && <Table columns={columns} data={data} />}
+            {/* <table className="table-content">
                 <thead>
                     <tr>
                         <td>Title</td>
@@ -45,7 +71,7 @@ const HomeContent = () => {
                         <td><button>Donwload</button></td>
                     </tr>
                 </tbody>
-            </table>
+            </table> */}
         </div>
     );
 }
