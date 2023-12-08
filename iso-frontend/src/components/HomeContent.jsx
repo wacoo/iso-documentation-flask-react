@@ -19,9 +19,10 @@ const HomeContent = () => {
         data = documents.map((doc) => ({
             Title: doc.title,
             Category: doc.category,
-            'Revision no.': doc.revision,
+            'Revision no.': doc.revision_no,
             Department: doc.department,
             Document: <button type="button">Download</button>,
+            description: doc.description
         }));
     }
     

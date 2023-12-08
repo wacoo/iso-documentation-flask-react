@@ -1,10 +1,11 @@
 import { useDispatch, useSelector } from "react-redux";
 import Table from "./Table";
-import { useEffect } from "react";
-import { fetchDepartments } from "../feature/department/departmentSlice";
+import { useEffect, useState } from "react";
+import { addDepartment, fetchDepartments } from "../feature/department/departmentSlice";
 
 const Deparment = () => {
 
+    const [deptInput, setDeptInput] =useState('');
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -22,6 +23,10 @@ const Deparment = () => {
         }));
     }
 
+    const handleSubmit = (value) => {
+        dispatch(addDepartment({'name': value}))
+    }
+
     return (
         <div className="home-content-wrapper">
             <h1>Department</h1>
@@ -29,8 +34,8 @@ const Deparment = () => {
                 <form action="">
                     <label htmlFor="name">Name</label>
                     <div className="one-input">
-                        <input type="text"  name="name" id="name" placeholder="Name"/>
-                        <button type="submit">Add</button>
+                        <input type="text"  name="name" id="name" placeholder="Name" onChange={(e) => setDeptInput(e.target.value)}/>
+                        <button type="submit" onClick={() => handleSubmit(deptInput)}>Add</button>
                     </div>    
                 </form>    
             </div>

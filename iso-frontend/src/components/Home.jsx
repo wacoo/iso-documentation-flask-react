@@ -12,9 +12,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { fetchCategories } from "../feature/category/categorySlice";
 import { fetchDepartments } from "../feature/department/departmentSlice";
+import User from "./User";
 
 const Home = () => {
-    const active = useSelector((state) => state.categories.activeMenu) ?? [];
+    const active = useSelector((state) => state.user.activeMenu) ?? [];
       
     const renderContent = () => {
         switch (active) {
@@ -25,9 +26,11 @@ const Home = () => {
           case 'Category':
             return <Category />;
           case 'Department':
+            console.log('dept...');
             return <Department />;
-          case 'SignUp':
-            return <SignUp />;
+          case 'User':
+            console.log('sign...');
+            return <User />;
           case 'Update':
             return <Update />;
           case 'SignIn':

@@ -38,7 +38,7 @@ def category():
         for category in all:
             cats.append({'id': category.id, 'name': category.name,
                          'created_at': category.created_at, 'updated_at': category.updated_at})
-            return jsonify(cats)
+        return jsonify(cats)
     except Exception as e:
         session.rollback()
         return jsonify({'error': 'Categories not fetched! ' + str(e)}), 500
@@ -228,7 +228,8 @@ def create_document():
     department_id = data['department_id']
     revision_no = data['revision_no']
     doc_type = data['doc_type']
-    document = data['document'].encode('utf-8')
+    document = str(data['document'])
+    document = document.encode('utf-8')
 
     try:
         doc = Document(

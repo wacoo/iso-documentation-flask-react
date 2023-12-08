@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import Home from "./Home";
-import { fetchCategories, setActive } from "../feature/category/categorySlice";
+import { fetchCategories } from "../feature/category/categorySlice";
+import { setActive } from "../feature/user/userSlice";
 
 const SideButton = ({text}) => {
     //const active = useSelector((state) => state.categories.activeMenu) ?? [];
