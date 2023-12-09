@@ -3,6 +3,7 @@ import axios from "axios"
 
 const initialState = {
     user: {},
+    token: {},
     activeMenu: 'Home',
     isLoading: false,
     error: undefined
@@ -18,8 +19,18 @@ const registerUser = createAsyncThunk('user/registerUser', async (data) => {
     }
 });
 
+const signIn = createAsyncThunk('user/signIn', async (data) => {
+    try {
+        const url = 'http://127.0.0.1:5000/auth/login';
+        const res = await axios.post(url, data);
+        return res.data;
+    } catch (error) {
+        return error.message;
+    }
+});
+
 const userSlice = createSlice({
-    name: 'categories',
+    name: 'user',
     initialState,
     reducers: {
         setActive: (state, action) => {
@@ -34,15 +45,28 @@ const userSlice = createSlice({
         })
         .addCase(registerUser.fulfilled, (state, action) => {
             state.isLoading = false;
-            state.categories = action.payload;
+            state.user = action.payload;
             // console.log(action.payload);
         })
         .addCase(registerUser.rejected, (state, action) => {
             state.isLoading = false;
             state.error = '';
         })
+        .addCase(signIn.pending, (state, action) => {
+            state.isLoading = true;
+        })
+        .addCase(signIn.fulfilled, (state, action) => {
+            state.isLoading = false;
+            state.token = action.payload;
+            console.log(action.payload);
+            localStorage.setItem('user', JSON.stringify(action.payload));
+        })
+        .addCase(signIn.rejected, (state, action) => {
+            state.isLoading = false;
+            state.error = '';
+        })
     }
 });
 export const { setActive } = userSlice.actions;
-export { registerUser };
+export { registerUser, signIn };
 export default userSlice.reducer;
