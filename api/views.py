@@ -251,6 +251,25 @@ def create_document():
         session.rollback()
         return jsonify({'error': 'Document not created! ' + str(e)}), 500
 
+@main_ap.route('/download', endpoint='download', methods=['GET'], strict_slashes=False)
+def download_doc():
+    ''' shows all documents'''
+    try:
+        id = request.args.get('id')
+        document = session.query(Document).filter(Document.id == document_id).first()
+        if document is None:
+            return "Document not found", 404
+
+        document_data = document.binary_data
+        return send_file(
+            io.BytesIO(document_data),
+            attachment_filename='document.pdf',
+            as_attachment=True
+        )
+    except Exception as e:
+        session.rollback()
+        return jsonify({'error': 'Documents not fetched! ' + str(e)}), 500
+
 
 if __name__ == '__main__':
     app.run()

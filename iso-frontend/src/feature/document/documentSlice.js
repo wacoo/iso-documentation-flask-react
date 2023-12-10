@@ -4,6 +4,7 @@ import axios from "axios"
 const url = 'http://127.0.0.1:5000/api/documents'
 const initialState = {
     documents: [],
+    documentsBy: [],
     docPostRes: '',
     // activeMenu: 'Category',
     isLoading: false,
@@ -15,6 +16,28 @@ const fetchDocuments = createAsyncThunk('documents/fetchDocuments', async () => 
         const res = await axios.get(url, {
             responseType: 'json',
         })
+        return res.data;
+    } catch (error) {
+        return error.message;
+    }
+});
+
+const fetchDocumentsBy = createAsyncThunk('documents/fetchDocumentsBy', async (data) => {
+    try {
+        const url2 =`${url}/by?${data.searchType}=${data.searchValue}`;
+        console.log(url2)
+        const res = await axios.get(url2, {
+            responseType: 'json',
+        })
+        return res.data;
+    } catch (error) {
+        return error.message;
+    }
+});
+
+const dlDocument = createAsyncThunk('documents/addDocument', async (data) => {
+    try {
+        const res = await axios.post(url, data);
         return res.data;
     } catch (error) {
         return error.message;
@@ -53,6 +76,18 @@ const documentSlice = createSlice({
             state.isLoading = false;
             state.error = '';
         })
+        .addCase(fetchDocumentsBy.pending, (state, action) => {
+            state.isLoading = true;
+        })
+        .addCase(fetchDocumentsBy.fulfilled, (state, action) => {
+            state.isLoading = false;
+            state.documents = action.payload;
+            console.log(action.payload);
+        })
+        .addCase(fetchDocumentsBy.rejected, (state, action) => {
+            state.isLoading = false;
+            state.error = '';
+        })
         .addCase(addDocument.pending, (state, action) => {
             state.isLoading = true;
         })
@@ -68,5 +103,5 @@ const documentSlice = createSlice({
     }
 });
 // export const { setActive } = categorySlice.actions;
-export { fetchDocuments, addDocument };
+export { fetchDocuments, fetchDocumentsBy, addDocument };
 export default documentSlice.reducer;

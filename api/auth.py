@@ -42,11 +42,11 @@ def login():# if username in user.__dict__ and users[username] == password:
     username = data['username']
     password = data['password']
     user = session.query(User).filter_by(username=username).first()
-    print(user.__dict__)
+    print(session.query(User).all)
     is_valid = bcrypt.check_password_hash(user.password, password)
     if user is not None and 'password' in user.__dict__ and is_valid:
         access_token = create_access_token(identity=username)
-        return jsonify(access_token=access_token), 200
+        return jsonify({'username': user.username, 'access_token': access_token}), 200
     else:
         return jsonify({ "message": "Invalid username or password" }), 401
 
