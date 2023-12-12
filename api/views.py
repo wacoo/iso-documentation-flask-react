@@ -178,16 +178,20 @@ def documents():
 def document():
     ''' shows a document based on id, name, date, category or department'''
     try:
-        id = request.args.get('id')
+        dtype = request.args.get('type')
         title = request.args.get('title')
         category = request.args.get('category')
         department = request.args.get('department')
-        if id:
-            doc = session.query(Document).filter_by(id=id).first()
-            return jsonify({'id': doc.id, 'title': doc.doc_title, 'description': doc.doc_description,
+        if dtype:
+            all = session.query(Document).filter(
+                Document.doc_type == dtype).all()
+            docs = []
+            for doc in all:
+                docs.append({'id': doc.id, 'title': doc.doc_title, 'description': doc.doc_description,
                             'category': doc.category.name, 'department': doc.department.name,
                             'revision_no': doc.revision_no, 'document_type': doc.doc_type, 'created_at': doc.created_at,
                             'updated_at': doc.updated_at})
+            return jsonify(docs)
         elif title:
             all = session.query(Document).filter(
                 Document.doc_title.like(f'%{title}%')).all()

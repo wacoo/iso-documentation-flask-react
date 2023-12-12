@@ -22,6 +22,7 @@ const fetchDocuments = createAsyncThunk('documents/fetchDocuments', async () => 
 const fetchDocumentsBy = createAsyncThunk('documents/fetchDocumentsBy', async (data) => {
   try {
     const url2 = `${url}/by?${data.searchType}=${data.searchValue}`;
+    console.log(url2);
     const res = await axios.get(url2);
     return res.data;
   } catch (error) {
@@ -101,7 +102,7 @@ const documentSlice = createSlice({
       })
       .addCase(fetchDocumentsBy.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.documentsBy = action.payload;
+        state.documents = action.payload;
       })
       .addCase(fetchDocumentsBy.rejected, (state, action) => {
         state.isLoading = false;

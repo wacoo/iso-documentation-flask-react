@@ -45,24 +45,23 @@ const Document = () => {
 
   const handleInputChange = (e) => {
     setData({ ...data, [e.target.name]: e.target.value });
-    console.log(data);
   };
 
   const handleFileChange = (e) => {
     const file_name = e.target.files[0].name;
-    // const file_no_ext = file_name.split('.').slice(0, -1).join('.');
-    setData({ ...data, document: e.target.files[0], doc_title: file_name });
+    const fileExtension = file_name.split('.').pop().toLowerCase();
+    setData({ ...data, document: e.target.files[0], doc_title: file_name, doc_type: fileExtension });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const updatedData = {
-      ...data,
-      category_id: categories.length > 0 ? categories[0].id : '',
-      department_id: departments.length > 0 ? departments[0].id : ''
-    };
-    setData(updatedData);
-    dispatch(addDocument(updatedData));
+    // const updatedData = {
+    //   ...data,
+    //   category_id: categories.length > 0 ? categories[0].id : '',
+    //   department_id: departments.length > 0 ? departments[0].id : ''
+    // };
+    // setData(updatedData);
+    dispatch(addDocument(data));
   };
 
   return (
@@ -76,7 +75,7 @@ const Document = () => {
             id="doc_title"
             name="doc_title"
             value={data.doc_title}
-            onChange={handleInputChange}
+            onChange={() => handleInputChange}
           />
           <label htmlFor="doc_description">Description</label>
           <input
@@ -90,8 +89,8 @@ const Document = () => {
           <select
             name="category_id"
             id="category"
-            placeholder="Category"
-            onChange={() => handleInputChange}
+            value={data.category_id}
+            onChange={handleInputChange}
           >
             {Array.isArray(categories) && categories.map((category) => (
               <option value={category.id} key={category.id}>
@@ -101,10 +100,10 @@ const Document = () => {
           </select>
           <label htmlFor="department">Department</label>
           <select
-            name="department_id" // Updated name
+            name="department_id"
             id="department"
-            placeholder="Department"
-            onChange={handleInputChange} // Updated event handler
+            value={data.category_id}
+            onChange={handleInputChange}
           >
             {Array.isArray(departments) && departments.map((dept) => (
               <option value={dept.id} key={dept.id}>

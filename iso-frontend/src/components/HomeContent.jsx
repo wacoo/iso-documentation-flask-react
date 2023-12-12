@@ -4,8 +4,7 @@ import { useEffect, useState } from "react";
 import Table from "./Table";
 
 const HomeContent = () => {
-
-  const [searchType, setSearchType] = useState('');
+  const [searchType, setSearchType] = useState('title');
   const [searchValue, setSearchValue] = useState('');
   const dispatch = useDispatch();
 
@@ -15,12 +14,10 @@ const HomeContent = () => {
 
 
   const handleDownload = (title) => {
-    console.log(title);
     dispatch(dlDocument(title));
   };
 
   const documents = useSelector((state) => state.documents.documents) ?? [];
-  // console.log("Documents have changed:", documents);
   const columns = ['Title', 'Category', 'Revision no.', 'Department', 'Document'];
   let data = [];
   if (Array.isArray(documents) && documents.length > 0) {
@@ -37,6 +34,8 @@ const HomeContent = () => {
 
   const handleSearch = (event) => {
     event.preventDefault();
+    const data = { 'searchType': searchType, 'searchValue': searchValue };
+    console.log(data);
     dispatch(fetchDocumentsBy({ 'searchType': searchType, 'searchValue': searchValue }));
   }
 
@@ -48,7 +47,7 @@ const HomeContent = () => {
             <option value="title">Title</option>
             <option value="category">Category</option>
             <option value="department">Department</option>
-            <option value="id">Document ID</option>
+            <option value="type">Document type</option>
           </select>
           <div className="search-bar">
             <input type="text" name="search_bar" id="search_bar" placeholder="Search..." onChange={(e) => setSearchValue(e.target.value)} />
