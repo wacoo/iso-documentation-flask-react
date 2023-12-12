@@ -13,8 +13,8 @@ const HomeContent = () => {
   }, [dispatch]);
 
 
-  const handleDownload = (title) => {
-    dispatch(dlDocument(title));
+  const handleDownload = (title, type) => {
+    dispatch(dlDocument({'fileName': title, 'ext': type}));
   };
 
   const documents = useSelector((state) => state.documents.documents) ?? [];
@@ -27,7 +27,7 @@ const HomeContent = () => {
       Category: doc.category,
       'Revision no.': doc.revision_no,
       Department: doc.department,
-      Document: <button type="button" onClick={() => {handleDownload(doc.title)}}>Download</button>,
+      Document: <button type="button" onClick={() => {handleDownload(doc.title, doc.doc_type)}}>Download</button>,
       description: doc.description
     }));
   }

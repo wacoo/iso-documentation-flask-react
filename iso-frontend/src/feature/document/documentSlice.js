@@ -30,8 +30,8 @@ const fetchDocumentsBy = createAsyncThunk('documents/fetchDocumentsBy', async (d
   }
 });
 
-const dlDocument = createAsyncThunk('documents/dlDocument', async (fileName) => {
-  const url2 = `${url}/download?fileName=${fileName}`;
+const dlDocument = createAsyncThunk('documents/dlDocument', async (data) => {
+  const url2 = `${url}/download?fileName=${data.fileName}`;
   console.log(url2);
   try {
     const response = await fetch(url2);
@@ -42,7 +42,7 @@ const dlDocument = createAsyncThunk('documents/dlDocument', async (fileName) => 
     const url3 = window.URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url3;
-    link.download = 'document.pdf';
+    link.download = `${data.fileName}`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);

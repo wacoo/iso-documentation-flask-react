@@ -224,6 +224,15 @@ def document():
                             'revision_no': doc.revision_no, 'document_type': doc.doc_type, 'created_at': doc.created_at,
                             'updated_at': doc.updated_at})
             return jsonify(docs)
+        else:
+            all = session.query(Document).all()
+            docs = []
+            for doc in all:
+                docs.append({'id': doc.id, 'title': doc.doc_title, 'description': doc.doc_description,
+                            'category': doc.category.name, 'department': doc.department.name,
+                            'revision_no': doc.revision_no, 'document_type': doc.doc_type, 'created_at': doc.created_at,
+                            'updated_at': doc.updated_at})
+            return jsonify(docs)
     except Exception as e:
             session.rollback()
             return jsonify({'error': 'Documents not fetched! ' + str(e)}), 500

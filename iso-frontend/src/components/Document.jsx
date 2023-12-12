@@ -43,6 +43,15 @@ const Document = () => {
     document: null,
   });
 
+    useEffect(() => {
+        const updatedData = {
+        ...data,
+        category_id: categories.length > 0 ? categories[0].id : '',
+        department_id: departments.length > 0 ? departments[0].id : ''
+      };
+      setData(updatedData);
+    }, [departments, categories])
+
   const handleInputChange = (e) => {
     setData({ ...data, [e.target.name]: e.target.value });
   };
@@ -55,12 +64,6 @@ const Document = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // const updatedData = {
-    //   ...data,
-    //   category_id: categories.length > 0 ? categories[0].id : '',
-    //   department_id: departments.length > 0 ? departments[0].id : ''
-    // };
-    // setData(updatedData);
     dispatch(addDocument(data));
   };
 
@@ -102,7 +105,7 @@ const Document = () => {
           <select
             name="department_id"
             id="department"
-            value={data.category_id}
+            value={data.department_id}
             onChange={handleInputChange}
           >
             {Array.isArray(departments) && departments.map((dept) => (
