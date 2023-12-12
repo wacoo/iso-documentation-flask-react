@@ -47,6 +47,10 @@
 
 }
 
+.input .file, .input label {
+    padding: 0;
+}
+
 .input textarea {
     height: 100px;
 }
@@ -58,17 +62,18 @@
     width: 100px;
     height: 20px;
     margin: 3px 0;
-    background-color: rgb(22, 46, 229);
+    background-color:  rgb(114, 114, 241);
     color: #fff;
     border-radius: 5px;
     font-size: 15px;
     font-weight: 600;
-    border: rgb(22, 46, 229) solid 2px;
+    border:  #fff solid 1px;
 }
 
  button.submit, button.submit2 {
     width: 100px;
     height: 35px;
+
 }
 
 button.submit {
@@ -76,6 +81,11 @@ button.submit {
 }
 button.submit2 {
     margin: 12px 0;
+}
+
+button:hover {
+    background-color: #1e90ff;
+    border: #1e90ff;
 }
 
 .table-content {
@@ -100,14 +110,18 @@ thead td {
     height: 80px;
     font-size: 20px;
     font-weight: 600;
-    background-color: rgb(62, 62, 223);
+    background-color: #1e90ff;
     color: #fff;
 }
 
+tr {
+    border: #ffff solid 2px;
+}
+
 tr:nth-child(even) {
-    background-color: #f2f2f2;
+    background-color: #a2cbf4;
 }
 
 tr:nth-child(odd) {
-    background-color: #f7c9c9;
+    background-color: #f9f7f7;
 }

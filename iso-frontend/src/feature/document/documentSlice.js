@@ -32,7 +32,6 @@ const fetchDocumentsBy = createAsyncThunk('documents/fetchDocumentsBy', async (d
 
 const dlDocument = createAsyncThunk('documents/dlDocument', async (data) => {
   const url2 = `${url}/download?fileName=${data.fileName}`;
-  console.log(url2);
   try {
     const response = await fetch(url2);
     if (!response.ok) {

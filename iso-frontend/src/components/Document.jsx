@@ -128,6 +128,7 @@ const Document = () => {
             id="document"
             name="document"
             onChange={handleFileChange}
+            className="file"
           />
           <button type="submit" className="submit">Submit</button>
         </form>

@@ -29,5 +29,6 @@
 }
 
 .side-button-wrapper button:hover {
-    color: orange;
+    color: rgb(32, 97, 69);
+    background-color: #60a6ed;
 }
