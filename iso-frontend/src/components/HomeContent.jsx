@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { fetchDocuments, fetchDocumentsBy } from "../feature/document/documentSlice";
+import { dlDocument, fetchDocuments, fetchDocumentsBy } from "../feature/document/documentSlice";
 import { useEffect, useState } from "react";
 import Table from "./Table";
 
@@ -13,17 +13,24 @@ const HomeContent = () => {
     dispatch(fetchDocuments());
   }, [dispatch]);
 
+
+  const handleDownload = (title) => {
+    console.log(title);
+    dispatch(dlDocument(title));
+  };
+
   const documents = useSelector((state) => state.documents.documents) ?? [];
-  console.log("Documents have changed:", documents);
+  // console.log("Documents have changed:", documents);
   const columns = ['Title', 'Category', 'Revision no.', 'Department', 'Document'];
   let data = [];
   if (Array.isArray(documents) && documents.length > 0) {
     data = documents.map((doc) => ({
+      id: doc.id,
       Title: doc.title,
       Category: doc.category,
       'Revision no.': doc.revision_no,
       Department: doc.department,
-      Document: <button type="button">Download</button>,
+      Document: <button type="button" onClick={() => {handleDownload(doc.title)}}>Download</button>,
       description: doc.description
     }));
   }
@@ -45,7 +52,7 @@ const HomeContent = () => {
           </select>
           <div className="search-bar">
             <input type="text" name="search_bar" id="search_bar" placeholder="Search..." onChange={(e) => setSearchValue(e.target.value)} />
-            <button type="submit">Search</button>
+            <button type="submit" className="submit">Search</button>
           </div>
         </form>
       </div>

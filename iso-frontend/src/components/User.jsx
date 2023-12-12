@@ -98,11 +98,11 @@ const User = () => {
                     value={data.access_level}
                     onChange={handleInputChange}
                 >
-                    <option value="viewer">Viewer</option>
-                    <option value="editor">Editor</option>
-                    <option value="admin">Administrator</option>
+                    <option value="0">Viewer</option>
+                    <option value="1">Editor</option>
+                    <option value="2">Administrator</option>
                 </select>
-                <button type="submit">Sign up</button>
+                <button type="submit" className="submit">Sign up</button>
                 </form>
             </div>
         </div>

@@ -17,7 +17,7 @@ const Deparment = () => {
     const columns = ['name', 'Action'];
     let data = [];
     if (departments.length > 0) {
-        data = departments.map((dept) => ({
+        data = Array.isArray(departments) && departments.map((dept) => ({
             name: dept.name,
             Action: <button type="button">Update</button>,
         }));
@@ -35,7 +35,7 @@ const Deparment = () => {
                     <label htmlFor="name">Name</label>
                     <div className="one-input">
                         <input type="text"  name="name" id="name" placeholder="Name" onChange={(e) => setDeptInput(e.target.value)}/>
-                        <button type="submit" onClick={() => handleSubmit(deptInput)}>Add</button>
+                        <button type="submit" onClick={() => handleSubmit(deptInput)}  className="submit2">Add</button>
                     </div>    
                 </form>    
             </div>

@@ -24,7 +24,7 @@ const Update = () => {
                         <option value="editor">Editor</option>
                         <option value="admin">Administrator</option>
                     </select>
-                    <button type="submit">Update</button>    
+                    <button type="submit" className="submit">Update</button>    
                 </form>    
             </div>
         </div>

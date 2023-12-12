@@ -1,15 +1,15 @@
 from flask import Blueprint, Flask, jsonify, request, current_app
-from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required
+from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required, get_jwt, verify_jwt_in_request
 from models.users import User
 from sqlalchemy.orm import sessionmaker
 from models.base import engine
 from flask_bcrypt import Bcrypt
+import traceback
 
 Session = sessionmaker(bind=engine)
 session = Session()
 
 auth_ap = Blueprint('auth_api', __name__)
-
 bcrypt = Bcrypt()
 
 @auth_ap.route('/', methods=['GET'], strict_slashes=False)
@@ -45,7 +45,12 @@ def login():# if username in user.__dict__ and users[username] == password:
     print(session.query(User).all)
     is_valid = bcrypt.check_password_hash(user.password, password)
     if user is not None and 'password' in user.__dict__ and is_valid:
-        access_token = create_access_token(identity=username)
+        if user.access_level == int(2):
+            access_token = create_access_token("admin", additional_claims={'is_admin': True})
+        elif user.access_level == int(1):
+            access_token = create_access_token("editor", additional_claims={'is_editor': True})
+        else:
+            access_token = create_access_token(identity=username)
         return jsonify({'username': user.username, 'access_token': access_token}), 200
     else:
         return jsonify({ "message": "Invalid username or password" }), 401
@@ -80,4 +85,5 @@ def register():
             return jsonify({'message': 'User created successfully', 'result': {'id': user.id, 'username': user.username, 'first_name': user.first_name, 'middle_name': user.middle_name, 'last_name': user.last_name, 'access_level': user.access_level, 'active': active}}), 201
     except Exception as e:
         session.rollback()
+        traceback.print_exc()
         return jsonify({'error': 'User not created! ' + str(e)}), 500

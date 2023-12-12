@@ -13,10 +13,10 @@ const Document = () => {
         await dispatchWithDelay(fetchCategories, 10);
         await dispatchWithDelay(fetchDepartments, 500);
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error('Error fetching data:', error.message);
       }
     };
-
+  
     fetchData();
   }, [dispatch]);
 
@@ -30,8 +30,8 @@ const Document = () => {
     });
   };
 
-  const categories = useSelector((state) => state.categories.categories);
-  const departments = useSelector((state) => state.departments.departments);
+  const categories = useSelector((state) => state.categories.categories) ?? [];
+  const departments = useSelector((state) => state.departments.departments) ?? [];
 
   const [data, setData] = useState({
     doc_title: '',
@@ -50,8 +50,8 @@ const Document = () => {
 
   const handleFileChange = (e) => {
     const file_name = e.target.files[0].name;
-    const file_no_ext = file_name.split('.').slice(0, -1).join('.');
-    setData({ ...data, document: e.target.files[0], doc_title: file_no_ext });
+    // const file_no_ext = file_name.split('.').slice(0, -1).join('.');
+    setData({ ...data, document: e.target.files[0], doc_title: file_name });
   };
 
   const handleSubmit = (e) => {
@@ -69,7 +69,7 @@ const Document = () => {
     <div className="home-content-wrapper">
       <h1>Create Document</h1>
       <div className="input">
-        <form onSubmit={handleSubmit} method="post">
+        <form onSubmit={handleSubmit} method="post" encType="multipart/form-data">
           <label htmlFor="doc_title">Title</label>
           <input
             type="text"
@@ -88,12 +88,12 @@ const Document = () => {
           />
           <label htmlFor="category">Category</label>
           <select
-            name="category_id" // Updated name
+            name="category_id"
             id="category"
             placeholder="Category"
-            onChange={handleInputChange} // Updated event handler
+            onChange={() => handleInputChange}
           >
-            {categories.map((category) => (
+            {Array.isArray(categories) && categories.map((category) => (
               <option value={category.id} key={category.id}>
                 {category.name}
               </option>
@@ -106,7 +106,7 @@ const Document = () => {
             placeholder="Department"
             onChange={handleInputChange} // Updated event handler
           >
-            {departments.map((dept) => (
+            {Array.isArray(departments) && departments.map((dept) => (
               <option value={dept.id} key={dept.id}>
                 {dept.name}
               </option>
@@ -127,7 +127,7 @@ const Document = () => {
             name="document"
             onChange={handleFileChange}
           />
-          <button type="submit">Submit</button>
+          <button type="submit" className="submit">Submit</button>
         </form>
       </div>
     </div>

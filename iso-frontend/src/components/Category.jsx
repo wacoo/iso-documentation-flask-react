@@ -13,7 +13,7 @@ const Category = () => {
     }, [dispatch]);
     
     const columns = ['name', 'Action'];
-    const data = categories.map((category) => ({
+    const data = Array.isArray(categories) && categories.map((category) => ({
         name: category.name,
         Action: <button type="button">Update</button>,
       }))
@@ -30,7 +30,7 @@ const Category = () => {
                     <label htmlFor="name">Name</label>
                     <div className="one-input">
                         <input type="text"  name="name" id="name" placeholder="Name" onChange={(e) => setCatInput(e.target.value)}/>
-                        <button type="submit" onClick={() => handleSubmit(catInput)}>Add</button>
+                        <button type="submit" onClick={() => handleSubmit(catInput)} className="submit2">Add</button>
                     </div>    
                 </form>
             </div>

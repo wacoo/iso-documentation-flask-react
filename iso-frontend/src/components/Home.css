@@ -38,7 +38,7 @@
 .input button,
 .input textarea {
     width: 100%;
-    height: 35px;
+    height: 30px;
     margin: 12px;
     border-radius: 5px;
     padding: 0 12px;
@@ -56,13 +56,26 @@
 }
 .input button, tr button {
     width: 100px;
-    height: 35px;
+    height: 20px;
+    margin: 3px 0;
     background-color: rgb(22, 46, 229);
     color: #fff;
     border-radius: 5px;
     font-size: 15px;
     font-weight: 600;
     border: rgb(22, 46, 229) solid 2px;
+}
+
+ button.submit, button.submit2 {
+    width: 100px;
+    height: 35px;
+}
+
+button.submit {
+    margin-left: 12px;
+}
+button.submit2 {
+    margin: 12px 0;
 }
 
 .table-content {

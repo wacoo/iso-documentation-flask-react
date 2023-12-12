@@ -1,17 +1,23 @@
-from flask import Blueprint, Flask, jsonify, request
+from flask import Blueprint, Flask, jsonify, request, send_file, send_from_directory, current_app
+from werkzeug.utils import secure_filename
 from models.categories import Category
 from models.deparments import Department
 from models.users import User
 from models.documents import Document
 from sqlalchemy.orm import sessionmaker
+from api.decorators import admin_required
 from models.base import engine
 from sqlalchemy import exc
+import traceback
+import io
+import os
 
 Session = sessionmaker(bind=engine)
 session = Session()
 
 main_ap = Blueprint('main_api', __name__)
 
+UPLOAD_DIRECTORY = os.path.join(main_ap.root_path, 'static', 'uploads')
 
 @main_ap.route('/', methods=['GET'], strict_slashes=False)
 def home():
@@ -151,6 +157,7 @@ def create_department():
 
 
 @main_ap.route('/documents', endpoint='documents', methods=['GET'], strict_slashes=False)
+# @admin_required
 def documents():
     ''' shows all documents'''
     try:
@@ -220,54 +227,81 @@ def document():
 
 @main_ap.route('/documents', methods=['POST'], strict_slashes=False)
 def create_document():
-    ''' create a new document '''
-    data = request.get_json()
-    doc_title = data['doc_title']
-    doc_description = data['doc_description']
-    category_id = data['category_id']
-    department_id = data['department_id']
-    revision_no = data['revision_no']
-    doc_type = data['doc_type']
-    document = str(data['document'])
-    document = document.encode('utf-8')
+    doc_title = request.form.get('doc_title')
+    doc_description = request.form.get('doc_description')
+    category_id = request.form.get('category_id')
+    department_id = request.form.get('department_id')
+    revision_no = request.form.get('revision_no')
+    doc_type = request.form.get('doc_type')
+    document = request.files.get('document')
 
     try:
-        doc = Document(
-            doc_title=doc_title,
-            doc_description=doc_description,
-            revision_no=revision_no,
-            category_id=category_id,
-            department_id=department_id,
-            doc_type=doc_type,
-            document=document
-        )
-        session.add(doc)
-        session.commit()
-        return jsonify({'message': 'Document created successfully', 'result': {'id': doc.id, 'title': doc.doc_title, 'description': doc.doc_description,
-                        'category': doc.category.name, 'department': doc.department.name,
-                                                                               'revision_no': doc.revision_no, 'document_type': doc.doc_type, 'created_at': doc.created_at,
-                                                                               'updated_at': doc.updated_at}}), 201
+        if document:
+            # Save the document to the UPLOAD_DIRECTORY
+            document_path = os.path.join(UPLOAD_DIRECTORY, secure_filename(document.filename))
+            print("Document path:", document_path)
+            if not os.path.exists(UPLOAD_DIRECTORY):
+                os.makedirs(UPLOAD_DIRECTORY)
+            document.save(document_path)
+
+            doc = Document(
+                doc_title=doc_title,
+                doc_description=doc_description,
+                revision_no=revision_no,
+                category_id=category_id,
+                department_id=department_id,
+                doc_type=doc_type,
+                document_path=document_path  # Store the file path in the database
+            )
+
+            session.add(doc)
+            session.commit()
+
+            return jsonify({'message': 'Document created successfully', 'result': {
+                'id': doc.id,
+                'title': doc.doc_title,
+                'description': doc.doc_description,
+                'category': doc.category.name,
+                'department': doc.department.name,
+                'revision_no': doc.revision_no,
+                'document_type': doc.doc_type,
+                'created_at': doc.created_at,
+                'updated_at': doc.updated_at
+            }}), 201
+
+        else:
+            return jsonify({'error': 'Document not provided'}), 400
+
     except Exception as e:
         session.rollback()
+        traceback.print_exc()
         return jsonify({'error': 'Document not created! ' + str(e)}), 500
 
-@main_ap.route('/download', endpoint='download', methods=['GET'], strict_slashes=False)
+@main_ap.route('/documents/download', endpoint='download', methods=['GET'], strict_slashes=False)
 def download_doc():
-    ''' shows all documents'''
     try:
-        id = request.args.get('id')
-        document = session.query(Document).filter(Document.id == document_id).first()
-        if document is None:
-            return "Document not found", 404
+        filename = request.args.get('fileName')
+        document = session.query(Document).filter_by(doc_title=filename).first()
+        print('Doc name: ', document.doc_title)
+        print('File name: ', filename)
+        document_path = os.path.join(UPLOAD_DIRECTORY, filename.replace(' ', '_'))
+        print("Document path:", document_path)
+        
+        if document:
+            print("Path exists:", os.path.exists(document_path))
+            if os.path.isfile(document_path):
+                print("File exists. Sending for download.")
+                return send_from_directory(UPLOAD_DIRECTORY, filename.replace(' ', '_'), as_attachment=True)
+            else:
+                print("File not found.")
+                return "Document not found", 404
 
-        document_data = document.binary_data
-        return send_file(
-            io.BytesIO(document_data),
-            attachment_filename='document.pdf',
-            as_attachment=True
-        )
+        return "Document not found", 404
+
     except Exception as e:
         session.rollback()
+        print("An error occurred while downloading the document:")
+        print(e)
         return jsonify({'error': 'Documents not fetched! ' + str(e)}), 500
 
 

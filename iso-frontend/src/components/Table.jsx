@@ -1,15 +1,18 @@
 import { useEffect, useState } from "react";
+import { dlDocument } from "../feature/document/documentSlice";
+import { useDispatch } from "react-redux";
 
 const Table = (props) => {
+  const dispatch = useDispatch();
   const { columns, data } = props;
   const [description, setDescription] = useState('');
-  console.log(data);
+  // console.log(data);
 
   useEffect(() => {
 
   }, [description]);
 
-  const handleClick = (item) => {
+  const handleHover = (item) => {
     setDescription(item.description);
   }
 
@@ -27,18 +30,18 @@ const Table = (props) => {
         <tbody>
           {data.length > 0 &&
             data.map((item, index) => (
-              <tr key={index} onClick={() => handleClick(item)}>
+              <tr key={index} onMouseEnter={() => handleHover(item)}>
                 {columns.map((column, colIndex) => (
                   <td key={colIndex}>{item[column]}</td>
                 ))}
                 <td>
-                  {columns.map((column, colIndex) => (
-                    column.startsWith("Button") && (
-                      <button key={colIndex} type="button">
-                        {item[column]}
-                      </button>
-                    )
-                  ))}
+                {columns.map((column, colIndex) => (
+                  column.startsWith("Button") && (
+                    <button key={colIndex} type="button">
+                      {item[column]}
+                    </button>
+                  )
+                ))}
                 </td>
               </tr>
             ))}

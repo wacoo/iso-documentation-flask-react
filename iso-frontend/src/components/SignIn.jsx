@@ -47,7 +47,7 @@ const SignIn = () => {
                 <input type="text" name="uname" id="uname" placeholder="User ID" />
                 <label htmlFor="pword">Password</label>
                 <input type="password" name="pword" id="pword" placeholder="Password" />
-                <button type="submit">Sign in</button>
+                <button type="submit" className="submit">Sign in</button>
                 </form>
             </div>
         </div>
