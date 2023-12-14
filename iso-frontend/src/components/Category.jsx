@@ -7,8 +7,11 @@ const Category = () => {
     const[catInput, setCatInput] = useState('');
     const dispatch = useDispatch();
     const categories = useSelector((state) => state.categories.categories) ?? [];
+    const categoriesPostRes = useSelector((state) => state.categories.catPostRes) ?? {};
+
+    console.log(categoriesPostRes);
     useEffect(() => {
-        dispatch(fetchCategories());
+        // dispatch(fetchCategories());
         console.log("Categories have changed:", categories);
     }, [dispatch]);
     

@@ -42,7 +42,9 @@ def login():# if username in user.__dict__ and users[username] == password:
     username = data['username']
     password = data['password']
     user = session.query(User).filter_by(username=username).first()
-    print(session.query(User).all)
+    print('SSSS')
+    print(user)
+    print('DDDDD')
     is_valid = bcrypt.check_password_hash(user.password, password)
     if user is not None and 'password' in user.__dict__ and is_valid:
         if user.access_level == int(2):

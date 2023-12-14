@@ -29,6 +29,16 @@
 }
 
 .side-button-wrapper button:hover {
-    color: rgb(32, 97, 69);
-    background-color: #60a6ed;
+    color: #fff;
+    background-color: #326598;
+}
+
+.side-button-wrapper button:active {
+    color: #000;
+    background-color: #326598;
+}
+
+.side-button-wrapper button:focus {
+    color: #fff;
+    background-color: #326598;
 }

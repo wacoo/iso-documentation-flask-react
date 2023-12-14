@@ -6,7 +6,7 @@
 
 .home-content-wrapper {
     width: 100%;
-    margin: 24px 12px 12px;
+    margin: 0 12px 12px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -85,7 +85,13 @@ button.submit2 {
 
 button:hover {
     background-color: #1e90ff;
-    border: #1e90ff;
+    border: #1e90ff solid 1px;
+}
+
+button:active {
+    background-color: #000;
+    border: #fff solid 1px;
+    color: #fff;
 }
 
 .table-content {
@@ -124,4 +130,39 @@ tr:nth-child(even) {
 
 tr:nth-child(odd) {
     background-color: #f9f7f7;
+}
+
+.notification {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 24px 0;
+}
+
+#success,
+#failure {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: green;
+    width: 100%;
+    height: 40px;
+    font-weight: 600;
+    font-size: 16px;
+    padding: 12px 0;
+    background-color: lightgreen;
+    font-style: italic;
+}
+
+#failure {
+    color: red;
+    background-color: rgb(252, 205, 205);
+}
+
+.no_notif {
+    visibility: hidden;
+}
+
+#no_notif {
+    display: none;
 }
