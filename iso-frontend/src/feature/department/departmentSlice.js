@@ -64,7 +64,8 @@ const departmentSlice = createSlice({
         })
         .addCase(addDepartment.rejected, (state, action) => {
             state.isLoading = false;
-            state.error = '';
+            state.error = action.error.message;
+            console.log(action.error.message);
         })
     }
 });

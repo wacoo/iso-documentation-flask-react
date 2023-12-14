@@ -38,7 +38,6 @@ const Home = (props) => {
           case 'SignIn':
             return <SignIn />;
           default:
-            console.log('waiting...');
             return null;
         }
       };
@@ -46,10 +45,6 @@ const Home = (props) => {
     return (
         <div className="home-wrapper">
             <Banner/>
-            <div className="no_notif">
-              <p id="no_notif">User created successfully!</p>
-              <p id="failure">Failed to create user</p>
-            </div>
             <div className="content-wrapper">
             {currentUser?.username && currentUser?.access_token ? (
               <>

@@ -6,6 +6,10 @@ import { addDepartment, fetchDepartments } from "../feature/department/departmen
 const Deparment = () => {
 
     const [deptInput, setDeptInput] =useState('');
+    const [msg, setMsg] = useState('');
+    const [load, setLoad] = useState(false);
+    const [notifClass, setNotifClass] = useState('no_notif');
+    const [notifId, setNotifId] = useState('no_notif');
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -13,7 +17,33 @@ const Deparment = () => {
     }, [dispatch]);
 
     const departments = useSelector((state) => state.departments.departments) ?? [];
-    console.log("Departments have changed:", departments);
+    const deptPostRes = useSelector((state) => state.departments.deptPostRes) ?? {};
+    useEffect(() => {
+        if (load) {
+            if (deptPostRes.message) {
+                setMsg(deptPostRes.message);
+                setNotifClass('notification');
+                setNotifId('success');
+            } else if (deptPostRes.error){
+                setMsg(deptPostRes.error);
+                setNotifClass('notification');
+                setNotifId('failure');
+            }
+            setLoad('false');
+            dispatch(fetchDepartments());
+            resetResult();
+        }
+        
+    }, [dispatch, deptPostRes]);
+
+    const resetResult = () => {
+        setTimeout(() => {
+            setMsg('');
+            setNotifClass('no_notif');
+            setNotifId('no_notif');
+        }, 5000)
+    }
+
     const columns = ['name', 'Action'];
     let data = [];
     if (departments.length > 0) {
@@ -23,19 +53,24 @@ const Deparment = () => {
         }));
     }
 
-    const handleSubmit = (value) => {
-        dispatch(addDepartment({'name': value}))
+    const handleSubmit = (value, e) => {
+        e.preventDefault();
+        dispatch(addDepartment({'name': value}));
+        setLoad(true);
     }
 
     return (
         <div className="home-content-wrapper">
-            <h1>Department</h1>
+            <div className={notifClass}>
+                <p id={notifId}>{msg}</p>
+            </div>
+            <h1>DEPARTMENT</h1>
             <div className="input">
                 <form action="">
                     <label htmlFor="name">Name</label>
                     <div className="one-input">
                         <input type="text"  name="name" id="name" placeholder="Name" onChange={(e) => setDeptInput(e.target.value)}/>
-                        <button type="submit" onClick={() => handleSubmit(deptInput)}  className="submit2">Add</button>
+                        <button type="submit" onClick={(e) => handleSubmit(deptInput, e)}  className="submit2">Add</button>
                     </div>    
                 </form>    
             </div>

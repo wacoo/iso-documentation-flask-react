@@ -63,7 +63,7 @@ const userSlice = createSlice({
         })
         .addCase(signIn.rejected, (state, action) => {
             state.isLoading = false;
-            state.error = '';
+            state.error = action.error.message;
         })
     }
 });

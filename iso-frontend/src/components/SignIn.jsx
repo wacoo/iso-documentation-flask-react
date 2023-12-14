@@ -40,7 +40,7 @@ const SignIn = () => {
     return (
 
         <div className="home-content-wrapper">
-            <h1>Sign in</h1>
+            <h1>SIGN IN</h1>
             <div className="input">
                 <form onSubmit={handleSubmit}>
                 <label htmlFor="uname">User ID</label>

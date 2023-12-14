@@ -69,7 +69,7 @@ const Document = () => {
 
   return (
     <div className="home-content-wrapper">
-      <h1>New document</h1>
+      <h1>NEW DOCUMENT</h1>
       <div className="input">
         <form onSubmit={handleSubmit} method="post" encType="multipart/form-data">
           <label htmlFor="doc_title">Title</label>

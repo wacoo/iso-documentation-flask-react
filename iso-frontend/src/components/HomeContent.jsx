@@ -14,7 +14,8 @@ const HomeContent = () => {
 
 
   const handleDownload = (title, e) => {
-    e.preventPropagation()
+    e.preventDefault();
+    e.stopPropagation();
     dispatch(dlDocument({'fileName': title}));
   };
 
@@ -42,7 +43,7 @@ const HomeContent = () => {
 
   return (
     <div className="home-content-wrapper">
-      <h1>Documents</h1>
+      <h1>FIND DOCUMENTS</h1>
       <div className="input">
         <form action="" onSubmit={handleSearch}>
           <select name="search_by" id="search_by" onChange={(e) => setSearchType(e.target.value)} value={searchType}>

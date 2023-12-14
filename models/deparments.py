@@ -7,7 +7,7 @@ from datetime import datetime
 class Department(Base):
     __tablename__ = 'departments'
     id = Column(String(36), primary_key=True)
-    name = Column(String(200))
+    name = Column(String(200), unique=True)
     created_at = Column(TIMESTAMP, default=datetime.utcnow)
     updated_at = Column(TIMESTAMP, default=datetime.utcnow, onupdate=datetime.utcnow)
     documents = relationship('Document', back_populates='department')

@@ -6,7 +6,7 @@ from datetime import datetime
 class Category(Base):
     __tablename__ = 'categories'
     id = Column(String(36), primary_key=True)
-    name = Column(String(45))
+    name = Column(String(45), unique=True)
     created_at = Column(TIMESTAMP, default=datetime.utcnow)
     updated_at = Column(TIMESTAMP, default=datetime.utcnow, onupdate=datetime.utcnow)
     documents = relationship('Document', back_populates='category')

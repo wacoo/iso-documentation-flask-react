@@ -7,7 +7,7 @@ from datetime import datetime
 class Document(Base):
     __tablename__ = 'documents'
     id = Column(String(36), primary_key=True)
-    doc_title = Column(String(200))
+    doc_title = Column(String(200), unique=True)
     doc_description = Column(String(500))
     revision_no = Column(Integer)
     category_id = Column(String(36), ForeignKey('categories.id'))

@@ -30,7 +30,8 @@
 
 .side-button-wrapper button:hover {
     color: #fff;
-    background-color: #326598;
+    background-color: #123eb7;
+    border: #fff solid 2px;
 }
 
 .side-button-wrapper button:active {
@@ -40,5 +41,6 @@
 
 .side-button-wrapper button:focus {
     color: #fff;
-    background-color: #326598;
+    background-color: #123eb7;
+    border: #fff solid 2px;
 }

@@ -61,7 +61,7 @@ const categorySlice = createSlice({
         })
         .addCase(addCategory.rejected, (state, action) => {
             state.isLoading = false;
-            state.error = '';
+            state.error = action.error.message;
         })
     }
 });

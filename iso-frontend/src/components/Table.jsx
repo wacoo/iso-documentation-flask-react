@@ -17,7 +17,8 @@ const Table = (props) => {
   }
 
   return (
-    <>
+    
+    <div className="table-container">
       <p>{description}</p>
       <table className="table-content">
         <thead>
@@ -27,7 +28,7 @@ const Table = (props) => {
             ))}
           </tr>
         </thead>
-        <tbody>
+        <tbody className="scrollable-body">
           {data.length > 0 &&
             data.map((item, index) => (
               <tr key={index} onMouseEnter={() => handleHover(item)}>
@@ -47,7 +48,7 @@ const Table = (props) => {
             ))}
         </tbody>
       </table>
-    </>
+    </div>
     
   );
 };

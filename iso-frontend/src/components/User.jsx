@@ -36,7 +36,7 @@ const User = () => {
 
     return (
         <div className="home-content-wrapper">
-            <h1>User registration</h1>
+            <h1>NEW USER</h1>
             <div className="input">
                 <form onSubmit={handleSubmit}>
                 <label htmlFor="fname">First name</label>
