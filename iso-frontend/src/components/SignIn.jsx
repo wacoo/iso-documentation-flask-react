@@ -33,9 +33,9 @@ const SignIn = () => {
     useEffect(() => {
         if (isLoggedIn) {
           console.log('testx');
-          navigate('/categories');
+          navigate('/');
         }
-      }, []);
+      }, [isLoggedIn]);
     
     return (
 

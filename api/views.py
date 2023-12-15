@@ -5,7 +5,7 @@ from models.deparments import Department
 from models.users import User
 from models.documents import Document
 from sqlalchemy.orm import sessionmaker
-from api.decorators import admin_required
+from api.decorators import viewer_required, editor_required, admin_required
 from models.base import engine
 from sqlalchemy import exc
 import traceback
@@ -20,6 +20,7 @@ main_ap = Blueprint('main_api', __name__)
 UPLOAD_DIRECTORY = os.path.join(main_ap.root_path, 'static', 'uploads')
 
 @main_ap.route('/', methods=['GET'], strict_slashes=False)
+@viewer_required
 def home():
     ''' shows all documents'''
     try:
@@ -36,6 +37,7 @@ def home():
 
 
 @main_ap.route('/categories', methods=['GET'], strict_slashes=False)
+@viewer_required
 def category():
     ''' shows all categories'''
     try:            
@@ -51,6 +53,7 @@ def category():
 
 
 @main_ap.route('/categories/<string:id>', endpoint='cat_by_id', methods=['GET'], strict_slashes=False)
+@viewer_required
 def category(id):
     ''' shows a category based on id'''
     try:
@@ -61,6 +64,7 @@ def category(id):
         return jsonify({'error': 'Category not fetched! ' + str(e)}), 500
 
 @main_ap.route('/categories', methods=['PUT'], strict_slashes=False)
+@editor_required
 def update_category():
     ''' update category name '''
     try:
@@ -82,6 +86,7 @@ def update_category():
 
 
 @main_ap.route('/categories', methods=['POST'], strict_slashes=False)
+@editor_required
 def create_category():
     ''' create a new category '''
     data = request.get_json()
@@ -97,6 +102,7 @@ def create_category():
 
 
 @main_ap.route('/departments', endpoint='departments', methods=['GET'], strict_slashes=False)
+@viewer_required
 def departments():
     ''' shows all departments'''
     try:
@@ -112,6 +118,7 @@ def departments():
 
 
 @main_ap.route('/departments/<string:id>', endpoint='dept_by_id', methods=['GET'], strict_slashes=False)
+@viewer_required
 def department(id):
     ''' shows a department'''
     try:
@@ -123,6 +130,7 @@ def department(id):
 
 
 @main_ap.route('/departments', methods=['PUT'], strict_slashes=False)
+@editor_required
 def update_department():
     ''' update department name '''
     try:
@@ -142,6 +150,7 @@ def update_department():
 
 
 @main_ap.route('/departments', methods=['POST'], strict_slashes=False)
+@editor_required
 def create_department():
     ''' create a new department '''
     data = request.get_json()
@@ -157,7 +166,7 @@ def create_department():
 
 
 @main_ap.route('/documents', endpoint='documents', methods=['GET'], strict_slashes=False)
-# @admin_required
+@viewer_required
 def documents():
     ''' shows all documents'''
     try:
@@ -175,6 +184,7 @@ def documents():
 
 
 @main_ap.route('/documents/by', methods=['GET'], strict_slashes=False)
+@viewer_required
 def document():
     ''' shows a document based on id, name, date, category or department'''
     try:
@@ -239,6 +249,7 @@ def document():
 
 
 @main_ap.route('/documents', methods=['POST'], strict_slashes=False)
+@editor_required
 def create_document():
     doc_title = request.form.get('doc_title')
     doc_description = request.form.get('doc_description')
@@ -250,7 +261,6 @@ def create_document():
 
     try:
         if document:
-            # Save the document to the UPLOAD_DIRECTORY
             document_path = os.path.join(UPLOAD_DIRECTORY, secure_filename(document.filename))
             print("Document path:", document_path)
             if not os.path.exists(UPLOAD_DIRECTORY):
@@ -264,7 +274,7 @@ def create_document():
                 category_id=category_id,
                 department_id=department_id,
                 doc_type=doc_type,
-                document_path=document_path  # Store the file path in the database
+                document_path=document_path
             )
 
             session.add(doc)
@@ -291,20 +301,25 @@ def create_document():
         return jsonify({'error': 'Document not created! ' + str(e)}), 500
 
 @main_ap.route('/documents/download', endpoint='download', methods=['GET'], strict_slashes=False)
+@viewer_required
 def download_doc():
     try:
-        filename = request.args.get('fileName')
-        document = session.query(Document).filter_by(doc_title=filename).first()
+        id = request.args.get('id')
+        document = session.query(Document).filter_by(id=id).first()
         print('Doc name: ', document.doc_title)
-        print('File name: ', filename)
-        document_path = os.path.join(UPLOAD_DIRECTORY, filename.replace(' ', '_'))
+        print('File id: ', id)
+        document_path = document.document_path
         print("Document path:", document_path)
         
         if document:
             print("Path exists:", os.path.exists(document_path))
             if os.path.isfile(document_path):
                 print("File exists. Sending for download.")
-                return send_from_directory(UPLOAD_DIRECTORY, filename.replace(' ', '_'), as_attachment=True)
+                directory = os.path.dirname(document_path)
+                print(directory)
+                filename = os.path.basename(document_path)
+                print(filename)
+                return send_from_directory(directory, filename, as_attachment=True)
             else:
                 print("File not found.")
                 return "Document not found", 404

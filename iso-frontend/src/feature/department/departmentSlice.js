@@ -2,6 +2,14 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import axios from "axios"
 
 const url = 'http://127.0.0.1:5000/api/departments';
+
+const user = localStorage.getItem('user');
+const token = JSON.parse(user).access_token;
+
+const headers = {
+    Authorization: `Bearer ${token}`,
+};
+
 const initialState = {
     departments: [],
     deptPostRes: {},
@@ -12,9 +20,7 @@ const initialState = {
 
 const fetchDepartments = createAsyncThunk('departments/fetchDepartments', async () => {
     try {
-        const res = await axios.get(url, {
-            responseType: 'json',
-        })
+        const res = await axios.get(url, { headers })
         console.log(res.data);
         return res.data;
     } catch (error) {
@@ -24,7 +30,7 @@ const fetchDepartments = createAsyncThunk('departments/fetchDepartments', async 
 
 const addDepartment = createAsyncThunk('departments/addDepartment', async (data) => {
     try {
-        const res = await axios.post(url, data);
+        const res = await axios.post(url, data, { headers });
         return res.data;
     } catch (error) {
         return error.message;
@@ -34,12 +40,6 @@ const addDepartment = createAsyncThunk('departments/addDepartment', async (data)
 const departmentSlice = createSlice({
     name: 'departments',
     initialState,
-    // reducers: {
-    //     setActive: (state, action) => {
-    //         console.log(action.payload);
-    //         state.activeMenu = action.payload;
-    //     },
-    // },
     extraReducers: (builder)  => {
         builder
         .addCase(fetchDepartments.pending, (state, action) => {
@@ -69,6 +69,5 @@ const departmentSlice = createSlice({
         })
     }
 });
-// export const { setActive } = categorySlice.actions;
 export { fetchDepartments, addDepartment };
 export default departmentSlice.reducer;

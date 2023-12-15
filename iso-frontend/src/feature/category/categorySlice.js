@@ -10,9 +10,17 @@ const initialState = {
     error: undefined
 }
 
+
+const user = localStorage.getItem('user');
+const token = JSON.parse(user).access_token;
+
+const headers = {
+    Authorization: `Bearer ${token}`,
+};
+
 const fetchCategories = createAsyncThunk('categories/fetchCategories', async () => {
     try {
-        const res = await axios.get(url);
+        const res = await axios.get(url, { headers });
         return res.data;
     } catch (error) {
         return error.message;
@@ -21,7 +29,7 @@ const fetchCategories = createAsyncThunk('categories/fetchCategories', async () 
 
 const addCategory = createAsyncThunk('categories/addCategory', async (data) => {
     try {
-        const res = await axios.post(url, data);
+        const res = await axios.post(url, data, { headers });
         return res.data;
     } catch (error) {
         return error.message;
@@ -31,12 +39,6 @@ const addCategory = createAsyncThunk('categories/addCategory', async (data) => {
 const categorySlice = createSlice({
     name: 'categories',
     initialState,
-    // reducers: {
-    //     setActive: (state, action) => {
-    //         console.log(action.payload);
-    //         state.activeMenu = action.payload;
-    //     },
-    // },
     extraReducers: (builder)  => {
         builder
         .addCase(fetchCategories.pending, (state, action) => {

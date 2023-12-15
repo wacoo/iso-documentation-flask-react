@@ -13,10 +13,10 @@ const HomeContent = () => {
   }, [dispatch]);
 
 
-  const handleDownload = (title, e) => {
+  const handleDownload = (doc, e) => {
     e.preventDefault();
     e.stopPropagation();
-    dispatch(dlDocument({'fileName': title}));
+    dispatch(dlDocument({'id': doc.id, 'title': doc.title}));
   };
 
   const documents = useSelector((state) => state.documents.documents) ?? [];
@@ -29,7 +29,7 @@ const HomeContent = () => {
       Category: doc.category,
       'Revision no.': doc.revision_no,
       Department: doc.department,
-      Document: <button type="button" onClick={(e) => {handleDownload(doc.title, e)}}>Download</button>,
+      Document: <button type="button" onClick={(e) => {handleDownload(doc, e)}}>Download</button>,
       description: doc.description
     }));
   }

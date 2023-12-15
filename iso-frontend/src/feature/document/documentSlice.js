@@ -2,6 +2,14 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
 const url = 'http://127.0.0.1:5000/api/documents';
+
+const user = localStorage.getItem('user');
+const token = JSON.parse(user).access_token;
+
+const headers = {
+    Authorization: `Bearer ${token}`,
+};
+
 const initialState = {
   documents: [],
   documentsBy: [],
@@ -12,7 +20,7 @@ const initialState = {
 
 const fetchDocuments = createAsyncThunk('documents/fetchDocuments', async () => {
   try {
-    const res = await axios.get(url);
+    const res = await axios.get(url, { headers });
     return res.data;
   } catch (error) {
     throw new Error(error.message);
@@ -23,7 +31,7 @@ const fetchDocumentsBy = createAsyncThunk('documents/fetchDocumentsBy', async (d
   try {
     const url2 = `${url}/by?${data.searchType}=${data.searchValue}`;
     console.log(url2);
-    const res = await axios.get(url2);
+    const res = await axios.get(url2, { headers });
     return res.data;
   } catch (error) {
     throw new Error(error.message);
@@ -31,9 +39,9 @@ const fetchDocumentsBy = createAsyncThunk('documents/fetchDocumentsBy', async (d
 });
 
 const dlDocument = createAsyncThunk('documents/dlDocument', async (data) => {
-  const url2 = `${url}/download?fileName=${data.fileName}`;
+  const url2 = `${url}/download?id=${data.id}`;
   try {
-    const response = await fetch(url2);
+    const response = await fetch(url2, { headers });
     if (!response.ok) {
     throw new Error(`HTTP error! Status: ${response.status}`);
     }
@@ -41,7 +49,7 @@ const dlDocument = createAsyncThunk('documents/dlDocument', async (data) => {
     const url3 = window.URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url3;
-    link.download = `${data.fileName}`;
+    link.download = `${data.title}`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -67,6 +75,7 @@ const addDocument = createAsyncThunk('documents/addDocument', async (data) => {
     const res = await axios.post(url, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
+        'Authorization': `Bearer ${token}`,
       },
     });
     return res.data;

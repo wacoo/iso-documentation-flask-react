@@ -30,29 +30,21 @@ def get_user(uname):
     return jsonify({'first_name': user.first_name, 'middle_name': user.middle_name, 'last_name':user.last_name, 'username': user.username, 'access_level': user.access_level, 'active': user.active})
 
 @auth_ap.route('/login', methods=['POST'], strict_slashes=False)
-def login():# if username in user.__dict__ and users[username] == password:
-    #     access_token = create_access_token(identity=username)
-    #     return jsonify(access_token=access_token), 200
-    # else:
-    #     return jsonify({ "message": "Invalid username orpassword" }), 401
-
+def login():
     'return user basic info'
     data = request.get_json()
 
     username = data['username']
     password = data['password']
     user = session.query(User).filter_by(username=username).first()
-    print('SSSS')
-    print(user)
-    print('DDDDD')
     is_valid = bcrypt.check_password_hash(user.password, password)
     if user is not None and 'password' in user.__dict__ and is_valid:
         if user.access_level == int(2):
-            access_token = create_access_token("admin", additional_claims={'is_admin': True})
+            access_token = create_access_token(identity={'username': username, 'role': 'admin'})
         elif user.access_level == int(1):
-            access_token = create_access_token("editor", additional_claims={'is_editor': True})
+            access_token = create_access_token(identity={'username': username, 'role': 'editor'})
         else:
-            access_token = create_access_token(identity=username)
+            access_token = create_access_token(identity={'username': username, 'role': 'viewer'})
         return jsonify({'username': user.username, 'access_token': access_token}), 200
     else:
         return jsonify({ "message": "Invalid username or password" }), 401
