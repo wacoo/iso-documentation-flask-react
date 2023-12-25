@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, ForeignKey, String, Integer, Column, Boolean, TIMESTAMP
+from sqlalchemy import create_engine, ForeignKey, String, Integer, Column, Boolean, TIMESTAMP, text, func, DateTime
 from sqlalchemy.orm import relationship
 from  models.base import Base
 from uuid import uuid4
@@ -14,8 +14,8 @@ class User(Base):
     last_name = Column(String(45))
     access_level = Column(Integer)
     active = Column(Boolean)
-    created_at = Column(TIMESTAMP, default=datetime.utcnow)
-    updated_at = Column(TIMESTAMP, default=datetime.utcnow, onupdate=datetime.utcnow)
+    created_at = Column(DateTime, server_default=func.now())
+    updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now())
     def __init__(self, username, password, first_name, middle_name, last_name, access_level, active):
         self.id = str(uuid4())
         self.username = username

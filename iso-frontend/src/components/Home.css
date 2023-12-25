@@ -1,7 +1,7 @@
 .content-wrapper {
     width: 100%;
     display: flex;
-    outline: green solid 2px;
+    /* outline: green solid 2px; */
 }
 
 .home-content-wrapper {

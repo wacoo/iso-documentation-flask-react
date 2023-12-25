@@ -1,0 +1,15 @@
+Kill pythonw: taskkill /IM pythonw.exe /F
+B is for background: start /B pythonw.exe run.py
+
+Flask starts at startup b/c schedule in shceduler by the name ISODoc
+run.bat needs to be scheduled
+
+issues
+======
+- problem with reload page after npm build - react router
+- login not redirecting to home
+- no logout button
+
+optional
+========
+- update cat and dept

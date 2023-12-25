@@ -79,5 +79,6 @@ def register():
             return jsonify({'message': 'User created successfully', 'result': {'id': user.id, 'username': user.username, 'first_name': user.first_name, 'middle_name': user.middle_name, 'last_name': user.last_name, 'access_level': user.access_level, 'active': active}}), 201
     except Exception as e:
         session.rollback()
+        session.close()
         traceback.print_exc()
         return jsonify({'error': 'User not created! ' + str(e)}), 500

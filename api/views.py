@@ -1,4 +1,4 @@
-from flask import Blueprint, Flask, jsonify, request, send_file, send_from_directory, current_app
+from flask import Blueprint, Flask, jsonify, request, send_file, send_from_directory, current_app, g
 from werkzeug.utils import secure_filename
 from models.categories import Category
 from models.deparments import Department
@@ -13,18 +13,32 @@ import io
 import os
 
 Session = sessionmaker(bind=engine)
-session = Session()
 
 main_ap = Blueprint('main_api', __name__)
 
 UPLOAD_DIRECTORY = os.path.join(main_ap.root_path, 'static', 'uploads')
+
+
+@main_ap.before_request
+def before_request():
+    g.session = Session()
+
+
+@main_ap.teardown_request
+def teardown_request(exception=None):
+    if hasattr(g, 'session'):
+        if exception:
+            g.session.rollback()
+        else:
+            g.session.commit()
+        g.session.close()
 
 @main_ap.route('/', methods=['GET'], strict_slashes=False)
 @viewer_required
 def home():
     ''' shows all documents'''
     try:
-        all = session.query(Document).all()
+        all = g.session.query(Document).all()
         docs = []
         for document in all:
             docs.append({'id': document.id, 'title': document.doc_title, 'revision': document.revision_no, 'description': document.doc_description, 'category': document.categories.name,
@@ -32,7 +46,7 @@ def home():
         print(docs)
         return jsonify(docs)
     except Exception as e:
-        session.rollback()
+        g.session.rollback()
         return jsonify({'error': 'Document not fetched! ' + str(e)}), 500
 
 
@@ -41,14 +55,14 @@ def home():
 def category():
     ''' shows all categories'''
     try:            
-        all = session.query(Category).all()
+        all = g.session.query(Category).all()
         cats = []
         for category in all:
             cats.append({'id': category.id, 'name': category.name,
                          'created_at': category.created_at, 'updated_at': category.updated_at})
         return jsonify(cats)
     except Exception as e:
-        session.rollback()
+        g.session.rollback()
         return jsonify({'error': 'Categories not fetched! ' + str(e)}), 500
 
 
@@ -57,10 +71,10 @@ def category():
 def category(id):
     ''' shows a category based on id'''
     try:
-        category = session.query(Category).filter_by(id=id).first()
+        category = g.session.query(Category).filter_by(id=id).first()
         return jsonify({'id': category.id, 'name': category.name, 'created_at': category.created_at, 'updated_at': category.updated_at})
     except Exception as e:
-        session.rollback()
+        g.session.rollback()
         return jsonify({'error': 'Category not fetched! ' + str(e)}), 500
 
 @main_ap.route('/categories', methods=['PUT'], strict_slashes=False)
@@ -72,16 +86,15 @@ def update_category():
         print(data)
         id = data['id']
         name = data['name']
-        cat = session.query(Category).filter_by(id=id).first()
-        cat = session.query(Category).filter_by(id=id).first()
+        cat = g.session.query(Category).filter_by(id=id).first()
         if cat:
             cat.name = name
-            session.commit()
+            g.session.commit()
             return jsonify({'message': 'Category name updated successfully'}), 200
         else:
             return jsonify({'message': 'Category not found'}), 404
     except Exception as e:
-        session.rollback()
+        g.session.rollback()
         return jsonify({'error': 'Category not updated! ' + str(e)}), 500
 
 
@@ -93,11 +106,11 @@ def create_category():
     name = data['name']
     try:
         cat = Category(name=name)
-        session.add(cat)
-        session.commit()
+        g.session.add(cat)
+        g.session.commit()
         return jsonify({'message': 'Category created successfully', 'result': {'id': cat.id, 'name': cat.name}}), 201
     except Exception as e:
-        session.rollback()
+        g.session.rollback()
         return jsonify({'error': 'Category not created! ' + str(e)}), 500
 
 
@@ -106,14 +119,14 @@ def create_category():
 def departments():
     ''' shows all departments'''
     try:
-        all = session.query(Department).all()
+        all = g.session.query(Department).all()
         depts = []
         for dept in all:
             depts.append({'id': dept.id, 'name': dept.name,
                           'created_at': dept.created_at, 'updated_at': dept.updated_at})
         return jsonify(depts)
     except Exception as e:
-        session.rollback()
+        g.session.rollback()
         return jsonify({'error': 'Category not fetched! ' + str(e)}), 500
 
 
@@ -122,10 +135,10 @@ def departments():
 def department(id):
     ''' shows a department'''
     try:
-        dept = session.query(Department).filter_by(id=id).first()
+        dept = g.session.query(Department).filter_by(id=id).first()
         return jsonify({'id': dept.id, 'name': dept.name, 'created_at': dept.created_at, 'updated_at': dept.updated_at})
     except Exception as e:
-        session.rollback()
+        g.session.rollback()
         return jsonify({'error': 'Department not fetched! ' + str(e)}), 500
 
 
@@ -137,15 +150,15 @@ def update_department():
         data = request.get_json()
         id = data['id']
         name = data['name']
-        dept = session.query(Department).filter_by(id=id).first()
+        dept = g.session.query(Department).filter_by(id=id).first()
         if dept:
             dept.name = name
-            session.commit()
+            g.session.commit()
             return jsonify({'message': 'Department name updated successfully'}), 200
         else:
             return jsonify({'message': 'Department not found'}), 404
     except Exception as e:
-        session.rollback()
+        g.session.rollback()
         return jsonify({'error': 'Departments not fetched! ' + str(e)}), 500
 
 
@@ -157,11 +170,11 @@ def create_department():
     name = data['name']
     try:
         dept = Department(name=name)
-        session.add(dept)
-        session.commit()
+        g.session.add(dept)
+        g.session.commit()
         return jsonify({'message': 'Department created successfully', 'result': {'id': dept.id, 'name': dept.name}}), 201
     except Exception as e:
-        session.rollback()
+        g.session.rollback()
         return jsonify({'error': 'Department not created! ' + str(e)}), 500
 
 
@@ -170,7 +183,7 @@ def create_department():
 def documents():
     ''' shows all documents'''
     try:
-        all = session.query(Document).all()
+        all = g.session.query(Document).all()
         docs = []
         for doc in all:
             docs.append({'id': doc.id, 'title': doc.doc_title, 'description': doc.doc_description,
@@ -179,7 +192,7 @@ def documents():
                         'updated_at': doc.updated_at})
         return jsonify(docs)
     except Exception as e:
-        session.rollback()
+        g.session.rollback()
         return jsonify({'error': 'Documents not fetched! ' + str(e)}), 500
 
 
@@ -193,7 +206,7 @@ def document():
         category = request.args.get('category')
         department = request.args.get('department')
         if dtype:
-            all = session.query(Document).filter(
+            all = g.session.query(Document).filter(
                 Document.doc_type == dtype).all()
             docs = []
             for doc in all:
@@ -203,7 +216,7 @@ def document():
                             'updated_at': doc.updated_at})
             return jsonify(docs)
         elif title:
-            all = session.query(Document).filter(
+            all = g.session.query(Document).filter(
                 Document.doc_title.like(f'%{title}%')).all()
             docs = []
             for doc in all:
@@ -214,7 +227,7 @@ def document():
             return jsonify(docs)
 
         elif category:
-            all = session.query(Document).join(Document.category).filter(
+            all = g.session.query(Document).join(Document.category).filter(
                 Category.name == category).all()
             docs = []
             for doc in all:
@@ -225,7 +238,7 @@ def document():
             return jsonify(docs)
 
         elif department:
-            all = session.query(Document).join(Document.department).filter(
+            all = g.session.query(Document).join(Document.department).filter(
                 Department.name == department).all()
             docs = []
             for doc in all:
@@ -235,7 +248,7 @@ def document():
                             'updated_at': doc.updated_at})
             return jsonify(docs)
         else:
-            all = session.query(Document).all()
+            all = g.session.query(Document).all()
             docs = []
             for doc in all:
                 docs.append({'id': doc.id, 'title': doc.doc_title, 'description': doc.doc_description,
@@ -244,8 +257,8 @@ def document():
                             'updated_at': doc.updated_at})
             return jsonify(docs)
     except Exception as e:
-            session.rollback()
-            return jsonify({'error': 'Documents not fetched! ' + str(e)}), 500
+        g.session.rollback()
+        return jsonify({'error': 'Documents not fetched! ' + str(e)}), 500
 
 
 @main_ap.route('/documents', methods=['POST'], strict_slashes=False)
@@ -277,8 +290,8 @@ def create_document():
                 document_path=document_path
             )
 
-            session.add(doc)
-            session.commit()
+            g.session.add(doc)
+            g.session.commit()
 
             return jsonify({'message': 'Document created successfully', 'result': {
                 'id': doc.id,
@@ -296,7 +309,7 @@ def create_document():
             return jsonify({'error': 'Document not provided'}), 400
 
     except Exception as e:
-        session.rollback()
+        g.session.rollback()
         traceback.print_exc()
         return jsonify({'error': 'Document not created! ' + str(e)}), 500
 
@@ -305,7 +318,7 @@ def create_document():
 def download_doc():
     try:
         id = request.args.get('id')
-        document = session.query(Document).filter_by(id=id).first()
+        document = g.session.query(Document).filter_by(id=id).first()
         print('Doc name: ', document.doc_title)
         print('File id: ', id)
         document_path = document.document_path
@@ -327,7 +340,7 @@ def download_doc():
         return "Document not found", 404
 
     except Exception as e:
-        session.rollback()
+        g.session.rollback()
         print("An error occurred while downloading the document:")
         print(e)
         return jsonify({'error': 'Documents not fetched! ' + str(e)}), 500

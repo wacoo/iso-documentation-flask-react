@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, ForeignKey, String, Integer, Column, Boolean, TIMESTAMP
+from sqlalchemy import create_engine, ForeignKey, String, Integer, Column, Boolean, TIMESTAMP, text, func, DateTime
 from sqlalchemy.orm import relationship
 from  models.base import Base
 from uuid import uuid4
@@ -14,8 +14,8 @@ class Document(Base):
     department_id = Column(String(36), ForeignKey('departments.id'))
     doc_type = Column(String(5))
     document_path = Column(String(255))
-    created_at = Column(TIMESTAMP, default=datetime.utcnow)
-    updated_at = Column(TIMESTAMP, default=datetime.utcnow, onupdate=datetime.utcnow)
+    created_at = Column(DateTime, server_default=func.now())
+    updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now())
     category = relationship('Category', back_populates='documents')
     department = relationship('Department', back_populates='documents')
     def __init__(self, doc_title, doc_description, revision_no, category_id, department_id, doc_type, document_path):

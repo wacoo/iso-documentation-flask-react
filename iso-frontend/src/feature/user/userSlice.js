@@ -9,9 +9,10 @@ const initialState = {
     error: undefined
 }
 
+let url = 'http://192.168.5.6:5000/auth';
 const registerUser = createAsyncThunk('user/registerUser', async (data) => {
     try {
-        const url = 'http://127.0.0.1:5000/auth/register'
+        url = `${url}/register`;
         const res = await axios.post(url, data);
         return res.data;
     } catch (error) {
@@ -21,7 +22,7 @@ const registerUser = createAsyncThunk('user/registerUser', async (data) => {
 
 const signIn = createAsyncThunk('user/signIn', async (data) => {
     try {
-        const url = 'http://127.0.0.1:5000/auth/login';
+        url = `${url}/login`;
         const res = await axios.post(url, data);
         return res.data;
     } catch (error) {

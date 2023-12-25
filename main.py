@@ -12,7 +12,7 @@ project_path = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(project_path)
 
 
-Base.metadata.drop_all(engine)
+# Base.metadata.drop_all(engine)
 Base.metadata.create_all(engine)
 
 # Session = sessionmaker(bind=engine)

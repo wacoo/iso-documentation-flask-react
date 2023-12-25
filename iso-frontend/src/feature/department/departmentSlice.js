@@ -1,10 +1,15 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import axios from "axios"
 
-const url = 'http://127.0.0.1:5000/api/departments';
+const url = 'http://192.168.5.6:5000/api/departments';
 
 const user = localStorage.getItem('user');
-const token = JSON.parse(user).access_token;
+let token = '';
+if (user) {
+	token = JSON.parse(user).access_token;
+} else {
+	token = '';
+}
 
 const headers = {
     Authorization: `Bearer ${token}`,
