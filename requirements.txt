@@ -97,3 +97,4 @@ virtualenv==20.24.6
 waitress==2.1.2
 Werkzeug==3.0.1
 wfastcgi==3.0.0
+waitress==2.1.2

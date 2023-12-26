@@ -1,11 +1,11 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import axios from "axios"
 
-const url = 'http://192.168.5.6:5000/api/categories'
+const url = 'http://localhost:5000/api/categories'
+// const url = 'http://192.168.5.6:5000/api/categories'
 const initialState = {
     categories: [],
     catPostRes: {},
-    // activeMenu: 'Home',
     isLoading: false,
     error: undefined
 }

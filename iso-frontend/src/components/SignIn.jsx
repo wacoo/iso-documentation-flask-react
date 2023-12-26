@@ -32,7 +32,6 @@ const SignIn = () => {
 
     useEffect(() => {
         if (isLoggedIn) {
-          console.log('testx');
           navigate('/');
         }
       }, [isLoggedIn]);

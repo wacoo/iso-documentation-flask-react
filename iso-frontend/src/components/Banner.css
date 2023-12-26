@@ -9,11 +9,30 @@
 }
 
 .banner-wrapper h1 {
-    width: 60%;
+    /* width: 30%; */
     font-size: 2.5vw;
 }
 
 .banner-wrapper img {
     width: 60px;
     border-radius: 50%;
+}
+
+.logout {
+    text-decoration: none;
+    color: #fff;
+    font-weight: 600;
+    visibility: visible;
+}
+
+.logout:hover {
+    color: orange;
+}
+
+.logout:active {
+    color: red;
+}
+
+.hidden {
+    visibility: hidden;
 }

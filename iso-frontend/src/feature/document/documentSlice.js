@@ -1,7 +1,8 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const url = 'http://192.168.5.6:5000/api/documents';
+const url = 'http://localhost:5000/api/documents';
+// const url = 'http://192.168.5.6:5000/api/documents';
 
 const user = localStorage.getItem('user');
 let token = '';
@@ -127,10 +128,12 @@ const documentSlice = createSlice({
       .addCase(addDocument.fulfilled, (state, action) => {
         state.isLoading = false;
         state.docPostRes = action.payload;
+        console.log(action.payload);
       })
       .addCase(addDocument.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.error.message;
+        console.log(action.error.message);
       });
   }
 });

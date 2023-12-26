@@ -1,14 +1,15 @@
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import { RouterProvider, createHashRouter } from "react-router-dom";
 import Home from "./components/Home";
 import Document from "./components/Document";
 import Category from "./components/Category";
 import Deparment from "./components/Deparment";
 import User from "./components/User";
 import SignIn from "./components/SignIn";
+import PageNotFound404 from "./components/PageNotFound404";
 
 function App() {
 
-  const router = createBrowserRouter([
+  const router = createHashRouter([
     {
       path: '/',
       element: <Home active="Home" />
@@ -32,6 +33,10 @@ function App() {
     {
       path: '/sign_in',
       element: <Home active="SignIn" />
+    },
+    {
+      path: '*',
+      element: <PageNotFound404 />
     }
   ]);
 

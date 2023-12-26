@@ -16,9 +16,17 @@ import User from "./User";
 
 const Home = (props) => {
     const active = props.active;
-    // const active = useSelector((state) => state.user.activeMenu) ?? [];
+    const [logoutClass, setLogoutClass] = useState('hidden');
     const currentUser = JSON.parse(localStorage.getItem('user'));
     console.log(currentUser?.access_token);
+
+    useEffect(() => {
+    if (currentUser?.access_token) {
+      setLogoutClass('logout');
+    } else {
+      setLogoutClass('hidden');
+    }
+  }, [currentUser?.access_token]);
     const renderContent = () => {
         switch (active) {
           case 'Home':
@@ -28,10 +36,8 @@ const Home = (props) => {
           case 'Category':
             return <Category />;
           case 'Department':
-            console.log('dept...');
             return <Department />;
           case 'User':
-            console.log('sign...');
             return <User />;
           case 'Update':
             return <Update />;
@@ -44,7 +50,7 @@ const Home = (props) => {
 
     return (
         <div className="home-wrapper">
-            <Banner/>
+            <Banner logoutClass={logoutClass}/>
             <div className="content-wrapper">
             {currentUser?.username && currentUser?.access_token ? (
               <>
