@@ -68,7 +68,7 @@ const dlDocument = createAsyncThunk('documents/dlDocument', async (data) => {
 
 const addDocument = createAsyncThunk('documents/addDocument', async (data) => {
   const formData = new FormData();
-  console.log(data)
+  // console.log(data)
   formData.append('doc_title', data.doc_title);
   formData.append('doc_description', data.doc_description);
   formData.append('category_id', data.category_id);

@@ -120,7 +120,7 @@ button:active {
 
 #failure {
     color: red;
-    background-color: rgb(252, 205, 205);
+    background-color: rgb(227, 186, 81);
 }
 
 .no_notif {
@@ -135,10 +135,7 @@ button:active {
     width: calc(60% + 48px);
     max-height: 300px;
     overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    text-align: center;
   }
   
   .table-container p {
@@ -162,11 +159,13 @@ tr, td {
 
 td {
     text-align: center;
+    font-size: 1.1vw;
 }
 
 thead td {
+    min-width: 5vw;
     height: 80px;
-    font-size: 20px;
+    font-size: 1vw;
     font-weight: 600;
     background-color: #1e90ff;
     color: #fff;

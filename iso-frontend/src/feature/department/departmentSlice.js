@@ -27,7 +27,7 @@ const initialState = {
 const fetchDepartments = createAsyncThunk('departments/fetchDepartments', async () => {
     try {
         const res = await axios.get(url, { headers })
-        console.log(res.data);
+        // console.log(res.data);
         return res.data;
     } catch (error) {
         return error.message;
@@ -54,7 +54,7 @@ const departmentSlice = createSlice({
         .addCase(fetchDepartments.fulfilled, (state, action) => {
             state.isLoading = false;
             state.departments = action.payload;
-            console.log(action.payload);
+            // console.log(action.payload);
         })
         .addCase(fetchDepartments.rejected, (state, action) => {
             state.isLoading = false;
@@ -66,12 +66,12 @@ const departmentSlice = createSlice({
         .addCase(addDepartment.fulfilled, (state, action) => {
             state.isLoading = false;
             state.deptPostRes = action.payload;
-            console.log(action.payload);
+            // console.log(action.payload);
         })
         .addCase(addDepartment.rejected, (state, action) => {
             state.isLoading = false;
             state.error = action.error.message;
-            console.log(action.error.message);
+            // console.log(action.error.message);
         })
     }
 });

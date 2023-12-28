@@ -6,6 +6,10 @@ import { fetchDepartments } from '../feature/department/departmentSlice';
 
 const Document = () => {
   const dispatch = useDispatch();
+  const [msg, setMsg] = useState('');
+  const [notifClass, setNotifClass] = useState('no_notif');
+  const [notifId, setNotifId] = useState('no_notif');
+  const [load, setLoad] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -32,7 +36,7 @@ const Document = () => {
 
   const categories = useSelector((state) => state.categories.categories) ?? [];
   const departments = useSelector((state) => state.departments.departments) ?? [];
-
+  const docPostRes = useSelector((state) => state.documents.docPostRes) ?? {};
   const [data, setData] = useState({
     doc_title: '',
     doc_description: '',
@@ -65,10 +69,40 @@ const Document = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(addDocument(data));
+    setLoad(true);
   };
+
+  useEffect(() => {
+    if (load) {
+        if (docPostRes.message) {
+            setMsg(docPostRes.message);
+            setNotifClass('notification');
+            setNotifId('success');
+        } else if (docPostRes.error){
+            setMsg(docPostRes.error);
+            setNotifClass('notification');
+            setNotifId('failure');
+        }
+        setLoad(false);
+        dispatch(fetchDepartments());
+        resetResult();
+    }
+    
+}, [dispatch, docPostRes]);
+
+const resetResult = () => {
+    setTimeout(() => {
+        setMsg('');
+        setNotifClass('no_notif');
+        setNotifId('no_notif');
+    }, 5000)
+}
 
   return (
     <div className="home-content-wrapper">
+       <div className={notifClass}>
+          <p id={notifId}>{msg}</p>
+        </div>
       <h1>NEW DOCUMENT</h1>
       <div className="input">
         <form onSubmit={handleSubmit} method="post" encType="multipart/form-data">

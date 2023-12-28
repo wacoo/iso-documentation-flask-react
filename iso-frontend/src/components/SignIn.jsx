@@ -1,4 +1,4 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { signIn } from "../feature/user/userSlice";
 import Home from "./Home";
 import { useEffect, useState } from "react";
@@ -9,7 +9,10 @@ const SignIn = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const dispatch = useDispatch();
     const navigate = useNavigate();
-
+    const [msg, setMsg] = useState('');
+    const [notifClass, setNotifClass] = useState('no_notif');
+    const [notifId, setNotifId] = useState('no_notif');
+    const error = useSelector((state) => state.user.error) ?? '';
     const handleSubmit = (event) => {
         event.preventDefault();
 
@@ -23,6 +26,11 @@ const SignIn = () => {
         .then(result => {
             if (result.payload.access_token) {
                 setIsLoggedIn(true);
+            } else {
+                setMsg('Login failed! make sure the user id or password is correct.');
+                setNotifClass('notification');
+                setNotifId('failure');
+                resetResult();
             }
         })
         .catch(error => {
@@ -36,9 +44,21 @@ const SignIn = () => {
         }
       }, [isLoggedIn]);
     
+
+      const resetResult = () => {
+        setTimeout(() => {
+            setMsg('');
+            setNotifClass('no_notif');
+            setNotifId('no_notif');
+        }, 5000)
+    }
+
     return (
 
         <div className="home-content-wrapper">
+            <div className={notifClass}>
+                <p id={notifId}>{msg}</p>
+            </div>
             <h1>SIGN IN</h1>
             <div className="input">
                 <form onSubmit={handleSubmit}>

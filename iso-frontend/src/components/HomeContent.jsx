@@ -12,9 +12,8 @@ const HomeContent = () => {
   const fetchData = async () => {
     try {
       await dispatch(fetchDocuments());
-      console.log('Data fetched successfully');
     } catch (error) {
-      console.error('Error fetching data', error);
+      console.error('Error fetching data');
     }
   };
 
@@ -30,14 +29,14 @@ const HomeContent = () => {
   };
 
   const documents = useSelector((state) => state.documents.documents) ?? [];
-  const columns = ['Title', 'Category', 'Revision no.', 'Department', 'Document'];
+  const columns = ['Title', 'Category', 'Rev no.', 'Department', 'Document'];
   let data = [];
   if (Array.isArray(documents) && documents.length > 0) {
     data = documents.map((doc) => ({
       id: doc.id,
       Title: doc.title,
       Category: doc.category,
-      'Revision no.': doc.revision_no,
+      'Rev no.': doc.revision_no,
       Department: doc.department,
       Document: <button type="button" onClick={(e) => {handleDownload(doc, e)}}>Download</button>,
       description: doc.description

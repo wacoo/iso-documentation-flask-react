@@ -29,7 +29,7 @@ const Deparment = () => {
                 setNotifClass('notification');
                 setNotifId('failure');
             }
-            setLoad('false');
+            setLoad(false);
             dispatch(fetchDepartments());
             resetResult();
         }

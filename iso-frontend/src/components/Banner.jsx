@@ -8,7 +8,7 @@ const Banner = ({ logoutClass }) => {
         e.preventDefault();
         localStorage.removeItem('user');
         logoutClass = 'hidden';
-        navigate('sign_in');
+        navigate('/sign_in');
     }
     return (
         <div className="banner-wrapper">

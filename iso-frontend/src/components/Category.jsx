@@ -8,22 +8,27 @@ const Category = () => {
     const [msg, setMsg] = useState('');
     const [notifClass, setNotifClass] = useState('no_notif');
     const [notifId, setNotifId] = useState('no_notif');
+    const [load, setLoad] = useState(false);
     const dispatch = useDispatch();
     const categories = useSelector((state) => state.categories.categories) ?? [];
     const categoriesPostRes = useSelector((state) => state.categories.catPostRes) ?? {};
 
     useEffect(() => {
-        if (categoriesPostRes.message) {
-            setMsg(categoriesPostRes.message);
-            setNotifClass('notification');
-            setNotifId('success');
-        } else if (categoriesPostRes.error){
-            setMsg(categoriesPostRes.error);
-            setNotifClass('notification');
-            setNotifId('failure');
+        if (load) {
+            if (categoriesPostRes.message) {
+                setMsg(categoriesPostRes.message);
+                setNotifClass('notification');
+                setNotifId('success');
+            } else if (categoriesPostRes.error){
+                setMsg(categoriesPostRes.error);
+                setNotifClass('notification');
+                setNotifId('failure');
+            }
+            setLoad(false);
+            dispatch(fetchCategories());
+            resetResult();
         }
-        dispatch(fetchCategories());
-        resetResult();
+        
     }, [dispatch, categoriesPostRes]);
 
     const columns = ['name', 'Action'];
@@ -32,11 +37,12 @@ const Category = () => {
         Action: <button type="button">Update</button>,
       }));
 
-    console.log(data);
+    // console.log(data);
 
     const handleSubmit = (value, e) => {
         e.preventDefault();
         dispatch(addCategory({'name': value}));
+        setLoad(true);
     }
 
 const resetResult = () => {

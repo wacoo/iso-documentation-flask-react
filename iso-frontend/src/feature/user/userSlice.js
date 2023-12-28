@@ -52,7 +52,7 @@ const userSlice = createSlice({
         })
         .addCase(registerUser.rejected, (state, action) => {
             state.isLoading = false;
-            state.error = '';
+            state.error = action.error.message;
         })
         .addCase(signIn.pending, (state, action) => {
             state.isLoading = true;
@@ -60,7 +60,8 @@ const userSlice = createSlice({
         .addCase(signIn.fulfilled, (state, action) => {
             state.isLoading = false;
             state.token = action.payload;
-            console.log(action.payload);
+            state.error = action.payload;
+            // console.log(action.payload);
             localStorage.setItem('user', JSON.stringify(action.payload));
         })
         .addCase(signIn.rejected, (state, action) => {
