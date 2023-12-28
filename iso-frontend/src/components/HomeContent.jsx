@@ -9,8 +9,18 @@ const HomeContent = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchDocuments());
-  }, [dispatch]);
+  const fetchData = async () => {
+    try {
+      await dispatch(fetchDocuments());
+      console.log('Data fetched successfully');
+    } catch (error) {
+      console.error('Error fetching data', error);
+    }
+  };
+
+  fetchData();
+}, [dispatch]);
+
 
 
   const handleDownload = (doc, e) => {

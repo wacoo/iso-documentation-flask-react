@@ -128,12 +128,12 @@ const documentSlice = createSlice({
       .addCase(addDocument.fulfilled, (state, action) => {
         state.isLoading = false;
         state.docPostRes = action.payload;
-        console.log(action.payload);
+        // console.log(action.payload);
       })
       .addCase(addDocument.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.error.message;
-        console.log(action.error.message);
+        // console.log(action.error.message);
       });
   }
 });
