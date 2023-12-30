@@ -4,6 +4,7 @@ from models.users import User
 from sqlalchemy.orm import sessionmaker
 from models.base import engine
 from flask_bcrypt import Bcrypt
+from api.decorators import admin_required
 import traceback
 
 Session = sessionmaker(bind=engine)
@@ -45,17 +46,18 @@ def login():
             access_token = create_access_token(identity={'username': username, 'role': 'editor'})
         else:
             access_token = create_access_token(identity={'username': username, 'role': 'viewer'})
-        return jsonify({'username': user.username, 'access_token': access_token}), 200
+        return jsonify({'username': user.username, 'access_token': access_token, 'access_level': user.access_level}), 200
     else:
         return jsonify({ "message": "Invalid username or password" }), 401
 
-@auth_ap.route('/protected', methods=['GET'])
-@jwt_required()
-def protected():
-    current_user = get_jwt_identity()
-    return jsonify({'logged_in_as': current_user}), 200
+# @auth_ap.route('/protected', methods=['GET'])
+# @jwt_required()
+# def protected():
+#     current_user = get_jwt_identity()
+#     return jsonify({'logged_in_as': current_user}), 200
 
 @auth_ap.route('/register', methods=['POST'], strict_slashes=False)
+@admin_required
 def register():
     data = request.get_json()
     uname = data['username']

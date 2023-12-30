@@ -19,6 +19,12 @@ const User = () => {
         active: 1,
     });
 
+    const usr = localStorage.getItem('user');
+    let access_level = 0;
+    if (usr) {
+        access_level = JSON.parse(usr)?.access_level;
+    }
+
     const user = useSelector((state) => state.user.user) ?? '';
 
     const handleInputChange = (e) => {
@@ -28,11 +34,11 @@ const User = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         let access = null;
-        if (data.access_level === 'viewer') {
+        if (data.access_level === '0') {
             access = 0;
-        } else if (data.access_level === 'editor') {
+        } else if (data.access_level === '1') {
             access = 1;
-        } else if (data.access_level === 'admin') {
+        } else if (data.access_level === '2') {
             access = 2;
         }
         setData({ ...data, access_level: access });
@@ -64,6 +70,17 @@ const User = () => {
             setNotifClass('no_notif');
             setNotifId('no_notif');
         }, 5000)
+    }
+
+    if (access_level < 2) {
+        return (
+            <div className="home-content-wrapper">
+                <h1>ERROR:401</h1>
+                <div className="input">
+                    <p>Sorry, you don't have access to this page!</p>
+                </div>
+            </div>
+        )
     }
 
     return (

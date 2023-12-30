@@ -8,19 +8,21 @@ const HomeContent = () => {
   const [searchValue, setSearchValue] = useState('');
   const dispatch = useDispatch();
 
-  useEffect(() => {
-  const fetchData = async () => {
-    try {
-      await dispatch(fetchDocuments());
-    } catch (error) {
-      console.error('Error fetching data');
-    }
-  };
+//   useEffect(() => {
+//   const fetchData = async () => {
+//     try {
+//       await dispatch(fetchDocuments());
+//     } catch (error) {
+//       console.error('Error fetching data');
+//     }
+//   };
 
-  fetchData();
+//   fetchData();
+// }, [dispatch]);
+
+useEffect(() => {
+  dispatch(fetchDocuments());
 }, [dispatch]);
-
-
 
   const handleDownload = (doc, e) => {
     e.preventDefault();

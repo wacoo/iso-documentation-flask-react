@@ -12,6 +12,12 @@ const Deparment = () => {
     const [notifId, setNotifId] = useState('no_notif');
     const dispatch = useDispatch();
 
+    const user = localStorage.getItem('user');
+    let access_level = 0;
+    if (user) {
+        access_level = JSON.parse(user)?.access_level;
+    }
+    
     useEffect(() => {
         dispatch(fetchDepartments());
     }, [dispatch]);
@@ -44,11 +50,11 @@ const Deparment = () => {
         }, 5000)
     }
 
-    const columns = ['name', 'Action'];
+    const columns = ['Name', 'Action'];
     let data = [];
     if (departments.length > 0) {
         data = Array.isArray(departments) && departments.map((dept) => ({
-            name: dept.name,
+            Name: dept.name,
             Action: <button type="button">Update</button>,
         }));
     }
@@ -59,6 +65,16 @@ const Deparment = () => {
         setLoad(true);
     }
 
+    if (access_level < 1) {
+        return (
+            <div className="home-content-wrapper">
+                <h1>ERROR:401</h1>
+                <div className="input">
+                    <p>Sorry, you don't have access to this page!</p>
+                </div>
+            </div>
+        )
+    }
     return (
         <div className="home-content-wrapper">
             <div className={notifClass}>
