@@ -13,7 +13,7 @@ import User from "./User";
 const Home = (props) => {
     const active = props.active;
     const [logoutClass, setLogoutClass] = useState('hidden');
-    const currentUser = JSON.parse(localStorage.getItem('user'));
+    const currentUser = JSON.parse(sessionStorage.getItem('user'));
     // console.log(currentUser?.access_token);
 
     useEffect(() => {

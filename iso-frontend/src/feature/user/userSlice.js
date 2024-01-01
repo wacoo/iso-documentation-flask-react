@@ -9,8 +9,8 @@ const initialState = {
     error: undefined
 }
 
-let url = 'http://localhost:5000/auth';
-// let url = 'http://192.168.5.6:5000/auth';
+// let url = 'http://localhost:5000/auth';
+let url = 'http://192.168.5.6:5000/auth';
 const registerUser = createAsyncThunk('user/registerUser', async (data) => {
     try {
         const full_url = `${url}/register`;
@@ -62,7 +62,7 @@ const userSlice = createSlice({
             state.token = action.payload;
             state.error = action.payload;
             // console.log(action.payload);
-            localStorage.setItem('user', JSON.stringify(action.payload));
+            sessionStorage.setItem('user', JSON.stringify(action.payload));
         })
         .addCase(signIn.rejected, (state, action) => {
             state.isLoading = false;

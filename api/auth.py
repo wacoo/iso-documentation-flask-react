@@ -57,7 +57,7 @@ def login():
 #     return jsonify({'logged_in_as': current_user}), 200
 
 @auth_ap.route('/register', methods=['POST'], strict_slashes=False)
-@admin_required
+# @admin_required
 def register():
     data = request.get_json()
     uname = data['username']

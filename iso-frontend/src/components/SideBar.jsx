@@ -2,12 +2,14 @@ import SideButton from "./SideButton";
 import './SideBar.css';
 
 const SideBar = () => {
-    const user = localStorage.getItem('user');
+    const user = sessionStorage.getItem('user');
+	// console.log(user);
     let access_level = 0;
     if (user) {
         access_level = JSON.parse(user)?.access_level;
     }
 
+	// console.log(access_level);
     return (
         <div className="side-bar-wrapper">
             <SideButton text = "Home" />

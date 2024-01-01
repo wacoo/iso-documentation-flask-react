@@ -19,7 +19,7 @@ const User = () => {
         active: 1,
     });
 
-    const usr = localStorage.getItem('user');
+    const usr = sessionStorage.getItem('user');
     let access_level = 0;
     if (usr) {
         access_level = JSON.parse(usr)?.access_level;

@@ -13,12 +13,13 @@ const Category = () => {
     const categories = useSelector((state) => state.categories.categories) ?? [];
     const categoriesPostRes = useSelector((state) => state.categories.catPostRes) ?? {};
 
-    const user = localStorage.getItem('user');
+    const user = sessionStorage.getItem('user');
     let access_level = 0;
     if (user) {
         access_level = JSON.parse(user)?.access_level;
     }
 
+	console.log(access_level);
     useEffect(() => {
         dispatch(fetchCategories());
     }, [dispatch]);

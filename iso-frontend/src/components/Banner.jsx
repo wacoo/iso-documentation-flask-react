@@ -6,7 +6,7 @@ const Banner = ({ logoutClass }) => {
     const navigate = useNavigate();
     const handleLogout = (e) => {
         e.preventDefault();
-        localStorage.removeItem('user');
+        sessionStorage.removeItem('user');
         logoutClass = 'hidden';
         navigate('/sign_in');
     }

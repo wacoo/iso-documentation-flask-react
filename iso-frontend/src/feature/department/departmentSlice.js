@@ -1,10 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import axios from "axios"
 
-const url = 'http://localhost:5000/api/departments';
-// const url = 'http://192.168.5.6:5000/api/departments';
+// const url = 'http://localhost:5000/api/departments';
+const url = 'http://192.168.5.6:5000/api/departments';
 
-const user = localStorage.getItem('user');
+const user = sessionStorage.getItem('user');
 let token = '';
 if (user) {
 	token = JSON.parse(user).access_token;
